@@ -47,28 +47,3 @@ class Test_User:
     def test_user_email_not_has_domain(self):
         with pytest.raises(ValidationError):
             User(email="usuario@", password_hash="hash_da_senha")
-
-
-    # def test_user_name_is_shorter_than_min_length(self):
-    #     with pytest.raises(ValidationError):
-    #         User(name="V", email="21.01444-2@maua.br", user_id=1, state=STATE.APPROVED)
-
-    # def test_user_email_is_none(self):
-    #     with pytest.raises(ValidationError):
-    #         User(name="VITOR", email=None, user_id=1, state=STATE.APPROVED)
-
-    # def test_user_email_is_not_valid(self):
-    #     with pytest.raises(ValidationError):
-    #         User(name="VITOR", email="21.01444-2maua.br", user_id=1, state=STATE.APPROVED)
-
-    # def test_user_user_id_is_not_int(self):
-    #     with pytest.raises(ValidationError):
-    #         User(name="VITOR", email="21.01444-2@maua.br", user_id="1", state=STATE.APPROVED)
-
-    # def test_user_user_id_is_negative(self):
-    #     with pytest.raises(ValidationError):
-    #         User(name="VITOR", email="21.01444-2@maua.br", user_id=-1, state=STATE.APPROVED)
-
-    # def test_user_state_is_not_sate_enum(self):
-    #     with pytest.raises(ValidationError):
-    #         User(name="VITOR", email="21.01444-2@maua.br", user_id=1, state="APPROVED")
