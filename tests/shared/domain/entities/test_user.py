@@ -9,7 +9,7 @@ from src.shared.domain.enums.role_enum import RoleEnum
 class Test_User:
     def test_user(self):
         user = User(email="usuario@example.com", password_hash="hash_da_senha")
-        id_user = user.id
+        id_user = user.user_id
         assert isinstance(id_user,uuid.UUID)
         assert user.email == "usuario@example.com"
         assert user.password_hash == "hash_da_senha"
@@ -25,7 +25,7 @@ class Test_User:
 
     def test_user_with_custom_id(self):
         user_id = uuid.uuid4()
-        user = User(id=user_id, email="usuario@example.com", password_hash="hash_da_senha")
+        user = User(user_id=user_id, email="usuario@example.com", password_hash="hash_da_senha")
         assert user.id == user_id
 
     def test_user_role_is_admin(self):

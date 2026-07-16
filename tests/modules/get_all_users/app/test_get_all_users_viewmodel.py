@@ -1,20 +1,18 @@
+import uuid
+
 from src.modules.get_all_users.app.get_all_users_viewmodel import GetAllUsersViewmodel, UserViewmodel
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.state_enum import STATE
 
 
 class Test_GetAllUsersViewmodel:
-    all_users_list = [
-        User(user_id=1,
-             name="Lucas Duez",
-             email="deuzexmachina@gmail.com",
-             state=STATE.APPROVED),
 
-        User(user_id=2,
-             name="Laura Blablachan",
-             email="laurinha@gmail.com",
-             state=STATE.APPROVED),
-    ]
+    uuid1 = uuid.uuid4()
+    uuid2 = uuid.uuid4()
+    all_users_list = [
+            User(user_id=uuid1, email="admin@example.com", role="admin", password_hash="hash_da_senha"),
+            User(user_id=uuid2, email="user@example.com", role="user", password_hash="hash_da_senha"),
+        ]
 
     def test_get_all_users_viewmodel(self):
         viewmodel = GetAllUsersViewmodel(self.all_users_list)
@@ -22,16 +20,14 @@ class Test_GetAllUsersViewmodel:
         expected = {
             "all_users": [
                 {
-                    'user_id': 1,
-                    'name': "Lucas Duez",
-                    'email': "deuzexmachina@gmail.com",
-                    'state': 'APPROVED',
+                    'user_id': self.uuid1,
+                    'email': "admin@example.com",
+                    'role': 'admin',
                 },
                 {
-                    'user_id': 2,
-                    'name': "Laura Blablachan",
-                    'email': "laurinha@gmail.com",
-                    'state': 'APPROVED',
+                    'user_id': self.uuid2,
+                    'email': "user@example.com",
+                    'role': 'user',
                 }
             ],
             "message": "all users has been retrieved"
@@ -43,22 +39,20 @@ class Test_GetAllUsersViewmodel:
 
     def test_user_viewmodel(self):
         viewmodel = UserViewmodel(
-            User(user_id=2,
-                 name="Laura Blablachan",
-                 email="laurinha@gmail.com",
-                 state=STATE.APPROVED),
-)
+            User(
+                user_id=self.uuid1,
+                email="admin@example.com",
+                role="admin",
+                password_hash="hash_da_senha"),
+        )
 
         response = viewmodel.to_dict()
 
         expected = {
-                    'user_id': 2,
-                    'name': "Laura Blablachan",
-                    'email': "laurinha@gmail.com",
-                    'state': 'APPROVED',
+                    'user_id': self.uuid1,
+                    'email': "admin@example.com",
+                    'role': "admin",
         }
 
         assert response == expected
 
-
-    

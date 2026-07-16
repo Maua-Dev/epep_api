@@ -6,7 +6,7 @@ from src.shared.domain.enums.role_enum import RoleEnum
 
 
 class User(BaseModel):
-    id: uuid.UUID = Field(
+    user_id: uuid.UUID = Field(
         default_factory=uuid.uuid4,
         description="Identificador único de usuário"
     )

@@ -12,17 +12,16 @@ class UserRepositoryMock(IUserRepository):
 
     def __init__(self):
         self.users = [
-            User(name="Bruno Soller", email="soller@soller.com", user_id=1, state=STATE.APPROVED),
-            User(name="Vitor Brancas", email="brancas@brancas.com", user_id=2, state=STATE.REJECTED),
-            User(name="João Vilas", email="bruno@bruno.com", user_id=3, state=STATE.PENDING)
+            User(email="admin@example.com", role="admin", password_hash="hash_da_senha"),
+            User(email="user@example.com", role="user", password_hash="hash_da_senha"),
         ]
-        self.user_counter = 3
+        self.user_counter = 2
 
-    def get_user(self, user_id: int) -> User:
+    def get_user(self, user_email: str) -> User:
         for user in self.users:
-            if user.user_id == user_id:
+            if user.email == user_email:
                 return user
-        raise NoItemsFound("user_id")
+        raise NoItemsFound("user_email")
 
     def get_all_user(self) -> List[User]:
         return self.users
@@ -32,20 +31,21 @@ class UserRepositoryMock(IUserRepository):
         self.user_counter += 1
         return new_user
 
-    def delete_user(self, user_id: int) -> User:
+    def delete_user(self, user_email: str) -> User:
         for idx, user in enumerate(self.users):
-            if user.user_id == user_id:
+            if user.email == user_email:
+                self.user_counter -= 1
                 return self.users.pop(idx)
 
-        raise NoItemsFound("user_id")
+        raise NoItemsFound("user_email")
 
-    def update_user(self, user_id: int, new_name: str) -> User:
+    def update_user(self, user_email: str, new_password_hash: str) -> User:
         for user in self.users:
-            if user.user_id == user_id:
-                user.name = new_name
+            if user.email == user_email:
+                user.password_hash = new_password_hash
                 return user
 
-        raise NoItemsFound("user_id")
+        raise NoItemsFound("user_email")
 
     def get_user_counter(self) -> int:
         return self.user_counter
