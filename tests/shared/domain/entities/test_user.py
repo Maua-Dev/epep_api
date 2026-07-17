@@ -3,7 +3,7 @@ import pytest
 from pydantic import ValidationError
 
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.role_enum import RoleEnum
+from src.shared.domain.enums.role_enum import ROLE
 
 
 class Test_User:

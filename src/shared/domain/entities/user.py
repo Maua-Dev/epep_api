@@ -2,7 +2,7 @@
 import uuid
 from pydantic import BaseModel, Field, EmailStr, ConfigDict
 
-from src.shared.domain.enums.role_enum import RoleEnum
+from src.shared.domain.enums.role_enum import ROLE
 
 
 class User(BaseModel):
@@ -18,14 +18,15 @@ class User(BaseModel):
         examples=["usuario@example.com"]
     )
 
-    role: RoleEnum = Field(
-        default=RoleEnum.USER,
+    role: ROLE = Field(
+        default=ROLE.USER,
         description="Função do usuário",
     )
 
     password_hash: str = Field(
         ...,
         description="Hash da senha do usuário",
+        min_length=4
     )
 
     model_config = ConfigDict(

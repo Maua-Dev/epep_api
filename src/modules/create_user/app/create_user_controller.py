@@ -10,7 +10,7 @@ from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
 from src.shared.helpers.external_interfaces.http_codes import OK, NotFound, BadRequest, InternalServerError, Created
 
-from src.shared.domain.enums.role_enum import RoleEnum
+from src.shared.domain.enums.role_enum import ROLE
 
 
 class CreateUserController:
@@ -28,7 +28,7 @@ class CreateUserController:
             user = self.CreateUserUsecase(
                 email=request.data.get('email'),
                 password_hash=request.data.get('password_hash'),
-                role=request.data.get('role') or RoleEnum.USER
+                role=request.data.get('role') or ROLE.USER
             )
 
             viewmodel = CreateUserViewmodel(user)

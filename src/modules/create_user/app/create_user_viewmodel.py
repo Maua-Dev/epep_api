@@ -1,12 +1,12 @@
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.role_enum import RoleEnum
+from src.shared.domain.enums.role_enum import ROLE
 from uuid import UUID
 
 class CreateUserViewmodel:
     user_id: UUID
     name: str
     email: str
-    role: RoleEnum
+    role: ROLE
 
     def __init__(self, user: User):
         self.user_id = user.user_id
