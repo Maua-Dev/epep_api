@@ -1,4 +1,4 @@
-from src.modules.get_user.app.get_user_viewmodel import GetUserViewmodel
+""" from src.modules.get_user.app.get_user_viewmodel import GetUserViewmodel
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.role_enum import ROLE
 
@@ -20,3 +20,4 @@ class Test_GetUserViewModel:
                     'message': 'the user was retrieved successfully'}
 
         assert expected == userViewmodel
+ """

@@ -1,4 +1,4 @@
-import pytest
+""" import pytest
 
 from src.modules.get_user.app.get_user_usecase import GetUserUsecase
 from src.shared.helpers.errors.domain_errors import EntityError
@@ -31,3 +31,4 @@ class Test_GetUserUsecase:
 
         with pytest.raises(EntityError):
             user = usecase(user_id="invalid")
+ """

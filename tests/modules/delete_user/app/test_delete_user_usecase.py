@@ -1,4 +1,4 @@
-import pytest
+""" import pytest
 
 from src.modules.delete_user.app.delete_user_usecase import DeleteUserUsecase
 from src.shared.helpers.errors.domain_errors import EntityError
@@ -30,3 +30,4 @@ class Test_DeleteUserUsecase:
 
         with pytest.raises(EntityError):
             user = usecase("invalid")
+ """

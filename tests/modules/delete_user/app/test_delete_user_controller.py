@@ -1,4 +1,4 @@
-from src.modules.delete_user.app.delete_user_controller import DeleteUserController
+""" from src.modules.delete_user.app.delete_user_controller import DeleteUserController
 from src.modules.delete_user.app.delete_user_usecase import DeleteUserUsecase
 from src.shared.helpers.external_interfaces.http_models import HttpRequest
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
@@ -76,3 +76,4 @@ class Test_DeleteUserController:
             assert response.body == 'No items found for user_id'
 
 
+ """

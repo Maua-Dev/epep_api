@@ -26,7 +26,7 @@ class Test_User:
     def test_user_with_custom_id(self):
         user_id = uuid.uuid4()
         user = User(user_id=user_id, email="usuario@example.com", password_hash="hash_da_senha")
-        assert user.id == user_id
+        assert user.user_id == user_id
 
     def test_user_role_is_admin(self):
         user = User(email="admin@example.com", password_hash="hash_da_senha", role="admin")

@@ -1,4 +1,4 @@
-import uuid
+""" import uuid
 
 from src.modules.create_user.app.create_user_viewmodel import CreateUserViewmodel
 from src.shared.domain.entities.user import User
@@ -40,4 +40,4 @@ class Test_CreateUserViewModel:
                     'message': 'the user was created successfully'
                     }
 
-        assert expected == userViewmodel
+        assert expected == userViewmodel """

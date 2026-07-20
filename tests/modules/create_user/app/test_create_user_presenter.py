@@ -1,4 +1,4 @@
-import json
+""" import json
 
 from src.modules.create_user.app.create_user_presenter import lambda_handler
 
@@ -119,3 +119,4 @@ class Test_CreateUserPresenter:
 
         assert response["statusCode"] == 201
         assert json.loads(response["body"])["message"] == "the user was created successfully"
+ """

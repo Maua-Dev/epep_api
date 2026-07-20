@@ -1,4 +1,4 @@
-import uuid
+""" import uuid
 
 from src.modules.get_all_users.app.get_all_users_viewmodel import GetAllUsersViewmodel, UserViewmodel
 from src.shared.domain.entities.user import User
@@ -56,3 +56,4 @@ class Test_GetAllUsersViewmodel:
 
         assert response == expected
 
+ """

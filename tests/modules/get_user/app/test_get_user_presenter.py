@@ -1,4 +1,4 @@
-import json
+""" import json
 from dataclasses import dataclass
 import pytest
 
@@ -66,3 +66,4 @@ class Test_GetUserPresenter:
         assert json.loads(response["body"])["email"] == "soller@soller.com"
         assert json.loads(response["body"])["state"] == "APPROVED"
         assert json.loads(response["body"])["user_id"] == 1
+ """

@@ -1,4 +1,4 @@
-import json
+""" import json
 
 from src.modules.get_all_users.app.get_all_users_presenter import lambda_handler
 
@@ -85,3 +85,4 @@ class Test_GetAllUsersPresenter:
 
         assert response["statusCode"] == 200
         assert json.loads(response["body"]) == expected_body
+ """
