@@ -52,7 +52,7 @@ class Test_CreateUserPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"email":"user@example.com", "password_hash": "hash_da_senha", "role": "admin"}',
+            "body": '{"name":"EhOLudjas",  "email":"eho@ludjas.com"}',
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None

@@ -12,24 +12,23 @@ class Test_CreateUserUsecase:
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
 
-        user = usecase(email="user@example.com", password_hash="hash_senha")
+        user = usecase(name="Vitor Choueri", email="branco@branco.branco")
 
         assert repo.users[-1] == user
+
+    def test_create_user_invalid_name(self):
+        repo = UserRepositoryMock()
+        usecase = CreateUserUsecase(repo)
+
+        with pytest.raises(EntityError):
+            user = usecase(name="V", email="branco@branco.branco")
 
     def test_create_user_invalid_email(self):
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
 
         with pytest.raises(EntityError):
-            user = usecase(email="branco@brancobranco", password_hash="hash_senha")
-    
-    def test_create_user_invalid_password(self):
-        repo = UserRepositoryMock()
-        usecase = CreateUserUsecase(repo=repo)
-
-        with pytest.raises(EntityError):
-            user = usecase(email="user@example.com", password_hash="h")
-
+            user = usecase(name="Vitor Choueri", email="branco@brancobranco")
 
 
 """

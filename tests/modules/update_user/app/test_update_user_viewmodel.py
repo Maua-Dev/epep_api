@@ -1,6 +1,6 @@
 """ from src.modules.update_user.app.update_user_viewmodel import UpdateUserViewmodel
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.role_enum import ROLE
+from src.shared.domain.enums.state_enum import STATE
 
 
 class Test_UpadateUserViewmodel:

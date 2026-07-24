@@ -1,16 +1,16 @@
 from decimal import Decimal
 
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.role_enum import ROLE
+from src.shared.domain.enums.state_enum import STATE
 
 
 class UserDynamoDTO:
     name: str
     email: str
-    role: ROLE
+    state: STATE
     user_id: int
 
-    def __init__(self, name: str, email: str, role: ROLE, user_id: int):
+    def __init__(self, name: str, email: str, state: STATE, user_id: int):
         self.name = name
         self.email = email
         self.user_id = user_id
