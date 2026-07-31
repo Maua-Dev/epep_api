@@ -13,8 +13,8 @@ class UserRepositoryMock(IUserRepository):
 
     def __init__(self):
         self.users = [
-            User(email="admin@example.com", role="admin", password_hash="hash_da_senha"),
-            User(email="user@example.com", role="user", password_hash="hash_da_senha"),
+            User(email="admin@example.com", role=ROLE.ADMIN, password_hash="hash_da_senha"),
+            User(email="user@example.com", role=ROLE.USER, password_hash="hash_da_senha"),
         ]
 
 
@@ -42,10 +42,10 @@ class UserRepositoryMock(IUserRepository):
             self,
             user: User, 
             new_password_hash: str | None = None, 
-            user_role: ROLE | None  = None
+            new_user_role: ROLE | None  = None
             ) -> User:
 
-        if new_password_hash is None and user_role is None:
+        if new_password_hash is None and new_user_role is None:
             raise MissingParameters("At least one parameter must be provided for update.")
         
         for stored_user in self.users:
@@ -53,8 +53,8 @@ class UserRepositoryMock(IUserRepository):
                 if new_password_hash is not None:
                     stored_user.password_hash = new_password_hash
 
-                if user_role is not None:
-                    stored_user.role = user_role
+                if new_user_role is not None:
+                    stored_user.role = new_user_role
                 return stored_user
 
         raise NoItemsFound("user_id")

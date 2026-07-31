@@ -51,7 +51,7 @@ class Test_UserRepositoryMock:
     def test_update_user_role(self):
             repo = UserRepositoryMock()
             user = repo.get_all_user()[0]
-            user = repo.update_user(user, user_role='admin')
+            user = repo.update_user(user, new_user_role=ROLE.ADMIN)
     
             assert user is not None
             assert user.role == ROLE.ADMIN

@@ -1,13 +1,15 @@
+import uuid
 from abc import ABC, abstractmethod
 from typing import List
 
 from src.shared.domain.entities.user import User
+from src.shared.domain.enums.role_enum import ROLE
 
 
 class IUserRepository(ABC):
 
     @abstractmethod
-    def get_user(self, user_id: int) -> User:
+    def get_user(self, user_id: uuid.UUID) -> User:
         """
         If user not found raise NoItemsFound
         """
@@ -22,14 +24,14 @@ class IUserRepository(ABC):
         pass
 
     @abstractmethod
-    def delete_user(self, user_id: int) -> User:
+    def delete_user(self, user_id: uuid.UUID) -> User:
         """
         If user not found raise NoItemsFound
         """
         pass
 
     @abstractmethod
-    def update_user(self, user_id: int, new_name: str) -> User:
+    def update_user(self, user: User, new_password: str | None, new_user_role: ROLE | None) -> User:
         """
         If user not found raise NoItemsFound
         """
