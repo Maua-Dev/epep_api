@@ -2,9 +2,10 @@ import uuid
 from typing import List
 
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.state_enum import STATE
+from src.shared.domain.enums.role_enum import ROLE
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.errors.controller_errors import MissingParameters
 
 
 class UserRepositoryMock(IUserRepository):
@@ -37,11 +38,24 @@ class UserRepositoryMock(IUserRepository):
 
         raise NoItemsFound("user_id")
 
-    def update_user(self, user_id: uuid.UUID, new_password_hash: str) -> User:
-        for user in self.users:
-            if user.user_id == user_id:
-                user.password_hash = new_password_hash
-                return user
+    def update_user(
+            self,
+            user: User, 
+            new_password_hash: str | None = None, 
+            user_role: ROLE | None  = None
+            ) -> User:
+
+        if new_password_hash is None and user_role is None:
+            raise MissingParameters("At least one parameter must be provided for update.")
+        
+        for stored_user in self.users:
+            if stored_user.user_id == user.user_id:
+                if new_password_hash is not None:
+                    stored_user.password_hash = new_password_hash
+
+                if user_role is not None:
+                    stored_user.role = user_role
+                return stored_user
 
         raise NoItemsFound("user_id")
 

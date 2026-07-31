@@ -2,6 +2,7 @@ import uuid
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.role_enum import ROLE
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
+from src.shared.helpers.errors.controller_errors import MissingParameters
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
 import pytest
 
@@ -38,18 +39,36 @@ class Test_UserRepositoryMock:
         users = repo.get_all_user()
         assert len(users) == 2
 
-    def test_update_user(self):
+    def test_update_user_password(self):
         repo = UserRepositoryMock()
-        user_id = repo.get_all_user()[0].user_id
-        user = repo.update_user(user_id, "new_hash_da_senha")
+        user = repo.get_all_user()[0]
+        user = repo.update_user(user, new_password_hash="new_hash_da_senha")
 
+        assert user is not None
         assert user.password_hash == "new_hash_da_senha"
         assert repo.users[0].password_hash == "new_hash_da_senha"
 
+    def test_update_user_role(self):
+            repo = UserRepositoryMock()
+            user = repo.get_all_user()[0]
+            user = repo.update_user(user, user_role='admin')
+    
+            assert user is not None
+            assert user.role == ROLE.ADMIN
+            assert repo.users[0].role == ROLE.ADMIN
+
+            
     def test_update_user_not_found(self):
         repo = UserRepositoryMock()
+        user = User(email="user@email.com", password_hash="password_hash" )
         with pytest.raises(NoItemsFound):
-            user = repo.update_user(uuid.uuid4(), "new_hash_da_senha")
+            user = repo.update_user(user, "new_hash_da_senha")
+
+    def test_update_missing_parameters(self):
+        repo = UserRepositoryMock()
+        user = User(email="user@email.com", password_hash="password_hash" )
+        with pytest.raises(MissingParameters):
+            user = repo.update_user(user)
 
     def test_get_users_counter(self):
         repo = UserRepositoryMock()
