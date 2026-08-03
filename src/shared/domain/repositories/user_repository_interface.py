@@ -31,7 +31,7 @@ class IUserRepository(ABC):
         pass
 
     @abstractmethod
-    def update_user(self, user: User, new_password: str | None, new_user_role: ROLE | None) -> User:
+    def update_user(self, user: User) -> User:
         """
         If user not found raise NoItemsFound
         """
