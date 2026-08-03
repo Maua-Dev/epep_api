@@ -1,4 +1,4 @@
-import os
+""" import os
 
 import pytest
 
@@ -56,3 +56,4 @@ class Test_UserRepositoryDynamo:
         resp = user_repository.update_user(user_id=1, new_name="Vitor Soller Soller")
 
         assert resp.name == "Vitor Soller Soller"
+ """

@@ -41,21 +41,12 @@ class UserRepositoryMock(IUserRepository):
     def update_user(
             self,
             user: User, 
-            new_password_hash: str | None = None, 
-            new_user_role: ROLE | None  = None
-            ) -> User:
 
-        if new_password_hash is None and new_user_role is None:
-            raise MissingParameters("At least one parameter must be provided for update.")
-        
-        for stored_user in self.users:
+            ) -> User:  
+        for idx, stored_user in enumerate(self.users):
             if stored_user.user_id == user.user_id:
-                if new_password_hash is not None:
-                    stored_user.password_hash = new_password_hash
-
-                if new_user_role is not None:
-                    stored_user.role = new_user_role
-                return stored_user
+                self.users[idx] = user
+                return self.users[idx]
 
         raise NoItemsFound("user_id")
 

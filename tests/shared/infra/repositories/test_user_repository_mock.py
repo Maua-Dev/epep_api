@@ -42,19 +42,22 @@ class Test_UserRepositoryMock:
     def test_update_user_password(self):
         repo = UserRepositoryMock()
         user = repo.get_all_user()[0]
-        user = repo.update_user(user, new_password_hash="new_hash_da_senha")
+        user = User(user_id=user.user_id, email=user.email, password_hash="new_hash_da_senha", role=user.role)
 
-        assert user is not None
-        assert user.password_hash == "new_hash_da_senha"
+        updated_user = repo.update_user(user)
+
+        assert updated_user is not None
+        assert updated_user.password_hash == "new_hash_da_senha"
         assert repo.users[0].password_hash == "new_hash_da_senha"
 
     def test_update_user_role(self):
             repo = UserRepositoryMock()
             user = repo.get_all_user()[0]
-            user = repo.update_user(user, new_user_role=ROLE.ADMIN)
-    
-            assert user is not None
-            assert user.role == ROLE.ADMIN
+            user = User(user_id=user.user_id, email=user.email, password_hash=user.password_hash, role=ROLE.ADMIN)
+
+            updated_user = repo.update_user(user)
+            assert updated_user is not None
+            assert updated_user.role == ROLE.ADMIN
             assert repo.users[0].role == ROLE.ADMIN
 
             
@@ -62,12 +65,6 @@ class Test_UserRepositoryMock:
         repo = UserRepositoryMock()
         user = User(email="user@email.com", password_hash="password_hash" )
         with pytest.raises(NoItemsFound):
-            user = repo.update_user(user, "new_hash_da_senha")
-
-    def test_update_missing_parameters(self):
-        repo = UserRepositoryMock()
-        user = User(email="user@email.com", password_hash="password_hash" )
-        with pytest.raises(MissingParameters):
             user = repo.update_user(user)
 
     def test_get_users_counter(self):
