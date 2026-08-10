@@ -134,9 +134,3 @@ dmypy.json
 /.vscode/
 /.idea/
 iac/local/docker/dynamodb/shared-local-instance.db
-
-# Docker
-.dockerignore
-compose.yaml
-Dockerfile
-README.Docker.md

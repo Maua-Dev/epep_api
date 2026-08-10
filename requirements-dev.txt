@@ -1,6 +1,5 @@
-pydantic==2.11.7 
-email-validator==2.2.0 
-urllib3>=2.0.0 
-pytest==8.4.1 
-pytest-cov==6.2.1 
+# pacotes necessários em local (lambda não usa)
+-r requirements-app.txt
+pytest==8.4.1
+pytest-cov==6.2.1
 boto3==1.43.60

@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.role_enum import ROLE
 
 
 class IUserRepository(ABC):
@@ -34,12 +33,5 @@ class IUserRepository(ABC):
     def update_user(self, user: User) -> User:
         """
         If user not found raise NoItemsFound
-        """
-        pass
-
-    @abstractmethod
-    def get_user_counter(self) -> int:
-        """
-        Returns the number of all users that have ever been created
         """
         pass

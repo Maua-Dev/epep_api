@@ -5,7 +5,6 @@ from src.shared.domain.entities.user import User
 from src.shared.domain.enums.role_enum import ROLE
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
-from src.shared.helpers.errors.controller_errors import MissingParameters
 
 
 class UserRepositoryMock(IUserRepository):
@@ -16,7 +15,6 @@ class UserRepositoryMock(IUserRepository):
             User(email="admin@example.com", role=ROLE.ADMIN, password_hash="hash_da_senha"),
             User(email="user@example.com", role=ROLE.USER, password_hash="hash_da_senha"),
         ]
-
 
     def get_user(self, user_id: uuid.UUID) -> User:
         for user in self.users:
@@ -38,17 +36,10 @@ class UserRepositoryMock(IUserRepository):
 
         raise NoItemsFound("user_id")
 
-    def update_user(
-            self,
-            user: User, 
-
-            ) -> User:  
+    def update_user(self, user: User) -> User:
         for idx, stored_user in enumerate(self.users):
             if stored_user.user_id == user.user_id:
                 self.users[idx] = user
                 return self.users[idx]
 
         raise NoItemsFound("user_id")
-
-    def get_user_counter(self) -> int:
-        return len(self.users)
