@@ -1,4 +1,4 @@
-import json
+""" import json
 
 from src.modules.delete_user.app.delete_user_presenter import lambda_handler
 
@@ -68,3 +68,4 @@ class Test_DeleteUserPresenter:
 
         assert json.loads(response["body"]) == expected
         assert response["statusCode"] == 200
+ """

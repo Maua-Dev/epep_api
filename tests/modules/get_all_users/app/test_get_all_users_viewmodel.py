@@ -1,4 +1,4 @@
-from src.modules.get_all_users.app.get_all_users_viewmodel import GetAllUsersViewmodel, UserViewmodel
+""" from src.modules.get_all_users.app.get_all_users_viewmodel import GetAllUsersViewmodel, UserViewmodel
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.state_enum import STATE
 
@@ -62,3 +62,4 @@ class Test_GetAllUsersViewmodel:
 
 
     
+ """

@@ -1,41 +1,48 @@
-from src.shared.domain.entities.user import User
-from src.shared.domain.enums.state_enum import STATE
-from src.shared.helpers.errors.domain_errors import EntityError
+import uuid
 import pytest
+
+from src.shared.domain.entities.user import User
+from src.shared.helpers.errors.domain_errors import EntityError
 
 
 class Test_User:
     def test_user(self):
-        User(name="VITOR", email="21.01444-2@maua.br", user_id=1, state=STATE.APPROVED)
+        user = User(email="usuario@example.com", password_hash="hash_da_senha")
+        id_user = user.user_id
+        assert isinstance(id_user, uuid.UUID)
+        assert user.email == "usuario@example.com"
+        assert user.password_hash == "hash_da_senha"
+        assert user.role == "user"
 
-    def test_user_name_is_none(self):
+    def test_user_not_has_email(self):
         with pytest.raises(EntityError):
-            User(name=None, email="21.01444-2@maua.br", user_id=1, state=STATE.APPROVED)
+            User(password_hash="hash_da_senha")
 
-    def test_user_name_is_not_str(self):
+    def test_user_not_has_password_hash(self):
         with pytest.raises(EntityError):
-            User(name=1, email="21.01444-2@maua.br", user_id=1, state=STATE.APPROVED)
+            User(email="usuario@example.com")
 
-    def test_user_name_is_shorter_than_min_length(self):
+    def test_user_with_custom_id(self):
+        user_id = uuid.uuid4()
+        user = User(user_id=user_id, email="usuario@example.com", password_hash="hash_da_senha")
+        assert user.user_id == user_id
+
+    def test_user_role_is_admin(self):
+        user = User(email="admin@example.com", password_hash="hash_da_senha", role="admin")
+        assert user.role == "admin"
+
+    def test_user_role_is_invalid(self):
         with pytest.raises(EntityError):
-            User(name="V", email="21.01444-2@maua.br", user_id=1, state=STATE.APPROVED)
+            User(email="usuario@example.com", password_hash="hash_da_senha", role="invalid_role")
 
     def test_user_email_is_none(self):
         with pytest.raises(EntityError):
-            User(name="VITOR", email=None, user_id=1, state=STATE.APPROVED)
+            User(email=None, password_hash="hash_da_senha")
 
-    def test_user_email_is_not_valid(self):
+    def test_user_email_not_has_at_symbol(self):
         with pytest.raises(EntityError):
-            User(name="VITOR", email="21.01444-2maua.br", user_id=1, state=STATE.APPROVED)
+            User(email="usuarioexample.com", password_hash="hash_da_senha")
 
-    def test_user_user_id_is_not_int(self):
+    def test_user_email_not_has_domain(self):
         with pytest.raises(EntityError):
-            User(name="VITOR", email="21.01444-2@maua.br", user_id="1", state=STATE.APPROVED)
-
-    def test_user_user_id_is_negative(self):
-        with pytest.raises(EntityError):
-            User(name="VITOR", email="21.01444-2@maua.br", user_id=-1, state=STATE.APPROVED)
-
-    def test_user_state_is_not_sate_enum(self):
-        with pytest.raises(EntityError):
-            User(name="VITOR", email="21.01444-2@maua.br", user_id=1, state="APPROVED")
+            User(email="usuario@", password_hash="hash_da_senha")

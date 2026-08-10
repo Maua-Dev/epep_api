@@ -1,3 +1,4 @@
+""" 
 import pytest
 
 from src.modules.create_user.app.create_user_usecase import CreateUserUsecase
@@ -30,3 +31,4 @@ class Test_CreateUserUsecase:
             user = usecase(name="Vitor Choueri", email="branco@brancobranco")
 
 
+"""

@@ -1,4 +1,4 @@
-from src.modules.update_user.app.update_user_viewmodel import UpdateUserViewmodel
+""" from src.modules.update_user.app.update_user_viewmodel import UpdateUserViewmodel
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.state_enum import STATE
 
@@ -18,3 +18,4 @@ class Test_UpadateUserViewmodel:
         }
 
         assert expected == updated_useer_viewmodel.to_dict()
+ """

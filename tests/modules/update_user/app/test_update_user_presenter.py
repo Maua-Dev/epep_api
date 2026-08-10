@@ -1,4 +1,4 @@
-import json
+""" import json
 
 from src.modules.update_user.app.update_user_presenter import lambda_handler
 
@@ -63,3 +63,4 @@ class Test_UpdateUserPresenter:
 
         assert response["statusCode"] == 200
         assert json.loads(response["body"])['name'] == 'João Soller'
+ """

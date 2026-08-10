@@ -1,60 +1,42 @@
-import abc
-import re
+import uuid
+from pydantic import BaseModel, Field, EmailStr, ConfigDict, ValidationError
 
-from src.shared.domain.enums.state_enum import STATE
+from src.shared.domain.enums.role_enum import ROLE
 from src.shared.helpers.errors.domain_errors import EntityError
 
 
-class User(abc.ABC):
-    name: str
-    email: str
-    state: STATE
-    MIN_NAME_LENGTH = 2
-    user_id: int
+class User(BaseModel):
+    def __init__(self, **data):
+        try:
+            super().__init__(**data)
+        except ValidationError as err:
+            raise EntityError(str(err.errors()[0]["loc"][0])) from err
 
-    def __init__(self, name: str, email: str, state: STATE, user_id: int = None):
-        if not User.validate_name(name):
-            raise EntityError("name")
-        self.name = name
+    user_id: uuid.UUID = Field(
+        default_factory=uuid.uuid4,
+        description="Identificador único de usuário"
+    )
 
-        if not User.validate_email(email):
-            raise EntityError("email")
-        self.email = email
+    email: EmailStr = Field(
+        ...,
+        description="Email do usuário",
+        min_length=5,
+        examples=["usuario@example.com"]
+    )
 
-        if type(user_id) == int:
-            if user_id < 0:
-                raise EntityError("user_id")
+    role: ROLE = Field(
+        default=ROLE.USER,
+        description="Função do usuário",
+    )
 
-        if type(user_id) != int and user_id is not None:
-            raise EntityError("user_id")
+    password_hash: str = Field(
+        ...,
+        description="Hash da senha do usuário",
+        min_length=4
+    )
 
-        self.user_id = user_id
-
-        if type(state) != STATE:
-            raise EntityError("state")
-        self.state = state
-
-    @staticmethod
-    def validate_name(name: str) -> bool:
-        if name is None:
-            return False
-        elif type(name) != str:
-            return False
-        elif len(name) < User.MIN_NAME_LENGTH:
-            return False
-
-        return True
-
-    @staticmethod
-    def validate_email(email: str) -> bool:
-        if email is None:
-            return False
-
-        regex = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
-
-        return bool(re.fullmatch(regex, email))
-
-
-
-    def __repr__(self):
-        return f"User(name={self.name}, email={self.email}, user_id={self.user_id}, state={self.state})"
+    model_config = ConfigDict(
+        use_enum_values=True,
+        extra="forbid",
+        populate_by_name=True,
+    )

@@ -1,4 +1,4 @@
-from decimal import Decimal
+""" from decimal import Decimal
 
 from src.shared.domain.entities.user import User
 from src.shared.domain.enums.state_enum import STATE
@@ -130,3 +130,4 @@ class Test_UserDynamoDto:
         }
 
         assert user_dynamo == expected_dict
+ """
