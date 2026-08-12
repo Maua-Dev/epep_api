@@ -12,8 +12,8 @@ class UserRepositoryMock(IUserRepository):
 
     def __init__(self):
         self.users = [
-            User(email="admin@example.com", role=ROLE.ADMIN, password_hash="hash_da_senha"),
-            User(email="user@example.com", role=ROLE.USER, password_hash="hash_da_senha"),
+            User(email="admin@example.com", role=ROLE.ADMIN),
+            User(email="user@example.com", role=ROLE.USER),
         ]
 
     def get_user(self, user_id: uuid.UUID) -> User:
