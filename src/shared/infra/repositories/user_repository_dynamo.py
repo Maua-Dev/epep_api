@@ -20,11 +20,14 @@ class UserRepositoryDynamo(IUserRepository):
         return f"#{user_id}"
 
     def __init__(self):
-        self.dynamo = DynamoDatasource(endpoint_url=Environments.get_envs().endpoint_url,
-                                       dynamo_table_name=Environments.get_envs().dynamo_table_name,
-                                       region=Environments.get_envs().region,
-                                       partition_key=Environments.get_envs().dynamo_partition_key,
-                                       sort_key=Environments.get_envs().dynamo_sort_key)
+        envs = Environments.get_envs()
+        self.dynamo = DynamoDatasource(
+            endpoint_url=envs.dynamo_endpoint_url,
+            dynamo_table_name=envs.dynamo_table_name,
+            region=envs.region,
+            partition_key=envs.dynamo_partition_key,
+            sort_key=envs.dynamo_sort_key,
+        )
     def get_user(self, user_id: int) -> User:
         resp = self.dynamo.get_item(partition_key=self.partition_key_format(user_id), sort_key=self.sort_key_format(user_id))
 

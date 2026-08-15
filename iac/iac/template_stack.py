@@ -34,13 +34,13 @@ class TemplateStack(Stack):
         }
                                                                )
 
-        self.dynamo_table = TemplateDynamoTable(self, "TemplateDynamoTable")
+        self.dynamo_table = TemplateDynamoTable(self, "TemplateDynamoTable", stage="DEV")
 
         ENVIRONMENT_VARIABLES = {
             "STAGE": "DEV",
             "DYNAMO_TABLE_NAME": self.dynamo_table.table.table_name,
-            "DYNAMO_PARTITION_KEY": "PK",
-            "DYNAMO_SORT_KEY": "SK",
+            "DYNAMO_PARTITION_KEY": "pk",
+            "DYNAMO_SORT_KEY": "sk",
             "REGION": self.region,
         }
 
