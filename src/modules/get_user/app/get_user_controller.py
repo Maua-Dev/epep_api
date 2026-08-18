@@ -1,3 +1,4 @@
+from uuid import UUID
 from src.shared.infra.external.observability.observability_aws import ObservabilityAWS
 from .get_user_usecase import GetUserUsecase
 from .get_user_viewmodel import GetUserViewmodel
@@ -29,13 +30,9 @@ class GetUserController:
                     fieldTypeReceived=request.data.get('user_id').__class__.__name__
                 )
 
-            if not request.data.get('user_id').isdecimal():
-                raise EntityError("user_id")
-
 
             user = self.GetUserUsecase(
-                user_id=int(request.data.get('user_id'))
-            )
+                user_id=UUID(request.data.get('user_id')))
 
             viewmodel = GetUserViewmodel(user)
             
