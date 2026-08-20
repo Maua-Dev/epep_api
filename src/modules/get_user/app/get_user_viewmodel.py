@@ -12,6 +12,6 @@ class GetUserViewmodel:
         self.user = user
 
     def to_dict(self):
-        data = self.user.model_dump(mode='j')
+        data = self.user.model_dump(mode='json')
         data.update({'message': "the user was retrieved successfully"})
         return data

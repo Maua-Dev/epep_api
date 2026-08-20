@@ -30,9 +30,13 @@ class GetUserController:
                     fieldTypeReceived=request.data.get('user_id').__class__.__name__
                 )
 
+            try:
+                user_id = UUID(request.data.get('user_id'))
+            except:
+                raise EntityError('user_id')
 
             user = self.GetUserUsecase(
-                user_id=UUID(request.data.get('user_id')))
+                user_id=user_id)
 
             viewmodel = GetUserViewmodel(user)
             
