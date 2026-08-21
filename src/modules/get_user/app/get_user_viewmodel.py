@@ -1,12 +1,9 @@
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.state_enum import STATE
+from src.shared.domain.enums.role_enum import ROLE
 
 
 class GetUserViewmodel:
-    user_id: int
-    name: str
-    email: str
-    state: STATE
+    user: User
 
     def __init__(self, user: User):
         self.user = user
