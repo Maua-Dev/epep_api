@@ -1,4 +1,5 @@
-""" from src.modules.delete_user.app.delete_user_controller import DeleteUserController
+import uuid
+from src.modules.delete_user.app.delete_user_controller import DeleteUserController
 from src.modules.delete_user.app.delete_user_usecase import DeleteUserUsecase
 from src.shared.helpers.external_interfaces.http_models import HttpRequest
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
@@ -10,9 +11,11 @@ class Test_DeleteUserController:
             usecase = DeleteUserUsecase(repo=repo)
             controller = DeleteUserController(usecase=usecase)
 
-            request = HttpRequest(body={
-                'user_id': '1'
-            })
+            request = HttpRequest(
+                body={'user_id': str(repo.users[0].user_id)}
+            )
+
+            print(request.body)
 
             response = controller(request=request)
 
@@ -67,13 +70,10 @@ class Test_DeleteUserController:
             controller = DeleteUserController(usecase=usecase)
 
             request = HttpRequest(body={
-                'user_id': '69'
+                'user_id': str(uuid.uuid4())
             })
 
             response = controller(request=request)
 
             assert response.status_code == 404
             assert response.body == 'No items found for user_id'
-
-
- """

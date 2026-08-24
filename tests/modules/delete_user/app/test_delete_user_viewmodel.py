@@ -1,24 +1,24 @@
-""" from src.modules.delete_user.app.delete_user_viewmodel import DeleteUserViewmodel
+import uuid
+from src.modules.delete_user.app.delete_user_viewmodel import DeleteUserViewmodel
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.state_enum import STATE
+from src.shared.domain.enums.role_enum import ROLE
 
 
 class Test_DeleteUserViewmodel:
     def test_delete_user_viewmodel(self):
+        user_id = uuid.uuid4()
         user = User(
-            user_id=1,
-            name="Vitinho da Silva",
+            user_id = user_id,
             email="21.01444-2@maua.br",
-            state=STATE.APPROVED)
+            role=ROLE.ADMIN
+            )
 
         delete_user_viewmodel = DeleteUserViewmodel(user)
 
         expected = {
-                    'user_id': 1,
-                    'name': 'Vitinho da Silva',
+                    'user_id': str(user_id),
                     'email': '21.01444-2@maua.br',
-                    'state': 'APPROVED',
+                    'role': 'admin',
                     'message': 'the user was deleted successfully'}
 
         assert expected == delete_user_viewmodel.to_dict()
- """
