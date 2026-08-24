@@ -4,13 +4,16 @@ import boto3
 import dotenv
 
 from src.shared.environments import Environments, STAGE
-from src.shared.helpers.errors.usecase_errors import DuplicatedUser
+from src.shared.infra.dto.template_dynamo_dto import UserDynamoDTO
+from src.shared.infra.external.dynamo.datasources.dynamo_datasource import DynamoDatasource
 from src.shared.infra.external.dynamo.dynamo_keys import (
+    EntityKind,
     GSI2_NAME,
     GSI2_PK_ATTR,
     GSI2_SK_ATTR,
+    partition_key,
+    sort_key,
 )
-from src.shared.infra.repositories.template_repository_dynamo import TemplateRepositoryDynamo
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
 
 
@@ -60,18 +63,38 @@ def setup_dynamo_table():
     print(f'Table "{table_name}" created!')
 
 
-def _load_users(dynamo_repo: TemplateRepositoryDynamo) -> int:
+def _build_datasource() -> DynamoDatasource:
+    envs = Environments.get_envs()
+    return DynamoDatasource(
+        dynamo_table_name=envs.dynamo_table_name,
+        region=envs.region,
+        partition_key=envs.dynamo_partition_key,
+        sort_key=envs.dynamo_sort_key,
+        endpoint_url=envs.dynamo_endpoint_url,
+    )
+
+
+def _load_users(dynamo: DynamoDatasource) -> int:
     mock_repo = UserRepositoryMock()
     count = 0
 
     print("Loading mock data to dynamo...")
     for user in mock_repo.users:
+        pk = partition_key(kind=EntityKind.USER)
+        sk = sort_key(id=user.user_id, kind=EntityKind.USER)
         print(f"Loading user {user.user_id} | {user.email} to dynamo")
-        try:
-            dynamo_repo.create_user(user)
-            count += 1
-        except DuplicatedUser:
+
+        existing = dynamo.get_item(partition_key=pk, sort_key=sk)
+        if existing.get("Item") is not None:
             print(f"  user {user.user_id} already exists, skipping")
+            continue
+
+        dynamo.put_item(
+            item=UserDynamoDTO.from_entity_to_dynamo(user),
+            partition_key=pk,
+            sort_key=sk,
+        )
+        count += 1
 
     print(f"{count} users loaded to dynamo!")
     return count
@@ -80,7 +103,7 @@ def _load_users(dynamo_repo: TemplateRepositoryDynamo) -> int:
 def load_mock_to_local_dynamo():
     """Create local table (if needed) and seed DynamoDB Local."""
     setup_dynamo_table()
-    _load_users(TemplateRepositoryDynamo())
+    _load_users(_build_datasource())
 
 
 def load_mock_to_real_dynamo():
@@ -101,7 +124,7 @@ def load_mock_to_real_dynamo():
         f"Seeding AWS DynamoDB "
         f"(stage={envs.stage.value}, table={envs.dynamo_table_name}, region={envs.region})"
     )
-    _load_users(TemplateRepositoryDynamo())
+    _load_users(_build_datasource())
 
 
 if __name__ == "__main__":
