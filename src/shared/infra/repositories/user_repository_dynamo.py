@@ -49,6 +49,17 @@ class UserRepositoryDynamo(IUserRepository):
             raise NoItemsFound("user_id")
 
         return UserDynamoDTO.from_dynamo_to_entity(resp["Item"])
+    
+    def get_all_user(self) -> List[User]:
+        resp = self.dynamo.query(
+            key_condition_expression=Key(PK_ATTR).eq(self._pk())
+        )
+
+        return [
+            UserDynamoDTO.from_dynamo_to_entity(user) 
+            for user in resp.get("Items", [])
+            ]
+
 
     def create_user(self, new_user: User) -> User:
         existing = self.dynamo.get_item(
@@ -76,3 +87,30 @@ class UserRepositoryDynamo(IUserRepository):
         )
 
         return new_user
+
+    def delete_user(self, user_id: UUID) -> User:
+        resp = self.dynamo.delete_item(
+            partition_key=self._pk(),
+            sort_key=self._sk(user_id)
+        )
+
+        if "Atributes" not in resp:
+            raise NoItemsFound('user_id')
+
+        return UserDynamoDTO.from_dynamo_to_entity(resp["Atributes"])
+
+
+    def update_user(self, user: User) -> User:
+        existing = self.dynamo.get_item(
+            partition_key=self._pk(),
+            sort_key=self._sk(user.user_id),
+        )
+        if existing.get("Item") is None:
+            raise NoItemsFound("user_id")
+
+        self.dynamo.put_item(
+            item=UserDynamoDTO.from_entity_to_dynamo(user),
+            partition_key=self._pk(),
+            sort_key=self._sk(user.user_id),
+        )
+        return user
