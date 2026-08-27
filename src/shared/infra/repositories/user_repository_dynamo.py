@@ -24,7 +24,7 @@ from src.shared.infra.external.dynamo.dynamo_keys import (
 class UserRepositoryDynamo(IUserRepository):
 
     def __init__(self) -> None:
-        envs = Environments()
+        envs = Environments.get_envs()
         self.dynamo = DynamoDatasource(
                     dynamo_table_name=envs.dynamo_table_name,
                     region=envs.region,
@@ -91,13 +91,13 @@ class UserRepositoryDynamo(IUserRepository):
     def delete_user(self, user_id: UUID) -> User:
         resp = self.dynamo.delete_item(
             partition_key=self._pk(),
-            sort_key=self._sk(user_id)
+            sort_key=self._sk(user_id),
         )
 
-        if "Atributes" not in resp:
-            raise NoItemsFound('user_id')
+        if "Attributes" not in resp:
+            raise NoItemsFound("user_id")
 
-        return UserDynamoDTO.from_dynamo_to_entity(resp["Atributes"])
+        return UserDynamoDTO.from_dynamo_to_entity(resp["Attributes"])
 
 
     def update_user(self, user: User) -> User:
