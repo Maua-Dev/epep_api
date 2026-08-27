@@ -29,12 +29,6 @@ class User(BaseModel):
         description="Função do usuário",
     )
 
-    password_hash: str = Field(
-        ...,
-        description="Hash da senha do usuário",
-        min_length=4
-    )
-
     model_config = ConfigDict(
         use_enum_values=True,
         extra="forbid",

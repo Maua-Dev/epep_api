@@ -13,11 +13,9 @@ class Test_UserRepositoryMock:
         repo = UserRepositoryMock()
         user = User(
             email="dohype@vitin.com",
-            password_hash="hash_da_senha",
         )
         repo.create_user(user)
         assert repo.users[-1].email == "dohype@vitin.com"
-        assert repo.users[-1].password_hash == "hash_da_senha"
         assert repo.users[-1].role == "user"
         assert len(repo.users) == 3
 
@@ -27,7 +25,6 @@ class Test_UserRepositoryMock:
         user = repo.get_user(user_id)
 
         assert user.email == "user@example.com"
-        assert user.password_hash == "hash_da_senha"
         assert user.role == "user"
 
     def test_get_user_not_found(self):
@@ -40,21 +37,6 @@ class Test_UserRepositoryMock:
         users = repo.get_all_user()
         assert len(users) == 2
 
-    def test_update_user_password(self):
-        repo = UserRepositoryMock()
-        user = repo.get_all_user()[0]
-        user = User(
-            user_id=user.user_id,
-            email=user.email,
-            password_hash="new_hash_da_senha",
-            role=user.role,
-        )
-
-        updated_user = repo.update_user(user)
-
-        assert updated_user is not None
-        assert updated_user.password_hash == "new_hash_da_senha"
-        assert repo.users[0].password_hash == "new_hash_da_senha"
 
     def test_update_user_role(self):
         repo = UserRepositoryMock()
@@ -62,7 +44,6 @@ class Test_UserRepositoryMock:
         user = User(
             user_id=user.user_id,
             email=user.email,
-            password_hash=user.password_hash,
             role=ROLE.ADMIN,
         )
 
@@ -73,7 +54,7 @@ class Test_UserRepositoryMock:
 
     def test_update_user_not_found(self):
         repo = UserRepositoryMock()
-        user = User(email="user@email.com", password_hash="password_hash")
+        user = User(email="user@email.com")
         with pytest.raises(NoItemsFound):
             repo.update_user(user)
 
@@ -82,7 +63,6 @@ class Test_UserRepositoryMock:
         user_id = repo.get_all_user()[1].user_id
         user = repo.delete_user(user_id)
         assert user.email == "user@example.com"
-        assert user.password_hash == "hash_da_senha"
         assert user.role == "user"
         assert len(repo.users) == 1
 
