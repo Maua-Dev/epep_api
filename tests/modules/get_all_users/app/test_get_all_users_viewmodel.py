@@ -1,19 +1,16 @@
-""" from src.modules.get_all_users.app.get_all_users_viewmodel import GetAllUsersViewmodel, UserViewmodel
+from src.modules.get_all_users.app.get_all_users_viewmodel import GetAllUsersViewmodel, UserViewmodel
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.state_enum import STATE
-
+from src.shared.domain.enums.role_enum import ROLE
 
 class Test_GetAllUsersViewmodel:
     all_users_list = [
-        User(user_id=1,
-             name="Lucas Duez",
+        User(user_id='842faa44-caf7-43bd-8019-d5ae5d3942b2',
              email="deuzexmachina@gmail.com",
-             state=STATE.APPROVED),
+             role=ROLE.ADMIN),
 
-        User(user_id=2,
-             name="Laura Blablachan",
+        User(user_id='5b20bcf8-f467-4569-83f2-1744534c162a',
              email="laurinha@gmail.com",
-             state=STATE.APPROVED),
+             role=ROLE.USER),
     ]
 
     def test_get_all_users_viewmodel(self):
@@ -22,16 +19,14 @@ class Test_GetAllUsersViewmodel:
         expected = {
             "all_users": [
                 {
-                    'user_id': 1,
-                    'name': "Lucas Duez",
+                    'user_id': '842faa44-caf7-43bd-8019-d5ae5d3942b2',
                     'email': "deuzexmachina@gmail.com",
-                    'state': 'APPROVED',
+                    'role': 'admin',
                 },
                 {
-                    'user_id': 2,
-                    'name': "Laura Blablachan",
+                    'user_id': '5b20bcf8-f467-4569-83f2-1744534c162a',
                     'email': "laurinha@gmail.com",
-                    'state': 'APPROVED',
+                    'role': 'user',
                 }
             ],
             "message": "all users has been retrieved"
@@ -43,23 +38,19 @@ class Test_GetAllUsersViewmodel:
 
     def test_user_viewmodel(self):
         viewmodel = UserViewmodel(
-            User(user_id=2,
-                 name="Laura Blablachan",
+            User(user_id='5b20bcf8-f467-4569-83f2-1744534c162a',
                  email="laurinha@gmail.com",
-                 state=STATE.APPROVED),
+                 role=ROLE.USER),
 )
 
         response = viewmodel.to_dict()
 
-        expected = {
-                    'user_id': 2,
-                    'name': "Laura Blablachan",
-                    'email': "laurinha@gmail.com",
-                    'state': 'APPROVED',
-        }
+        expected ={
+            'user_id': '5b20bcf8-f467-4569-83f2-1744534c162a',
+            'email': "laurinha@gmail.com",
+            'role': 'user',
+            }
 
         assert response == expected
 
 
-    
- """
