@@ -1,4 +1,4 @@
-""" import json
+import json
 from dataclasses import dataclass
 import pytest
 
@@ -22,7 +22,7 @@ class Test_GetUserPresenter:
                 "header2": "value1,value2"
             },
             "queryStringParameters": {
-                "user_id": "1"
+                "user_id": "5b20bcf8-f467-4569-83f2-1744534c162a"
             },
             "requestContext": {
                 "accountId": "123456789012",
@@ -62,8 +62,6 @@ class Test_GetUserPresenter:
 
         response = lambda_handler(event, None)
         assert response["statusCode"] == 200
-        assert json.loads(response["body"])["name"] == "Bruno Soller"
-        assert json.loads(response["body"])["email"] == "soller@soller.com"
-        assert json.loads(response["body"])["state"] == "APPROVED"
-        assert json.loads(response["body"])["user_id"] == 1
- """
+        assert json.loads(response["body"])["email"] == "admin@example.com"
+        assert json.loads(response["body"])["role"] == "admin"
+        assert json.loads(response["body"])["user_id"] == '5b20bcf8-f467-4569-83f2-1744534c162a'

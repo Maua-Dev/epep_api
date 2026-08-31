@@ -1,5 +1,5 @@
-""" import pytest
-
+import uuid
+import pytest
 from src.modules.get_user.app.get_user_usecase import GetUserUsecase
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
@@ -23,12 +23,11 @@ class Test_GetUserUsecase:
         usecase = GetUserUsecase(repo, observability=observability)
 
         with pytest.raises(NoItemsFound):
-            user = usecase(user_id=999)
+            user = usecase(user_id=uuid.uuid4())
 
     def test_get_user_invalid_id(self):
         repo = UserRepositoryMock()
         usecase = GetUserUsecase(repo, observability=observability)
 
         with pytest.raises(EntityError):
-            user = usecase(user_id="invalid")
- """
+            user = usecase(user_id=99)
