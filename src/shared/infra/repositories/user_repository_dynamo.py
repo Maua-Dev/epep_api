@@ -70,16 +70,6 @@ class UserRepositoryDynamo(IUserRepository):
         if existing.get("Item") is not None:
             DuplicatedUser("user_id")
 
-        email_resp = self.dynamo.query(
-            key_condition_expression=Key(GSI2_PK_ATTR).eq(
-                    gsi2_partition_key(new_user.email)
-                ),
-                IndexName=GSI2_NAME,
-                Select="COUNT",
-        )
-        if email_resp.get("Item", 0 ) > 0:
-            DuplicatedUser("email")
-
         self.dynamo.put_item(
             item=UserDynamoDTO.from_entity_to_dynamo(new_user),
             partition_key=self._pk(),
