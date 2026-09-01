@@ -1,3 +1,4 @@
+import uuid
 import pytest
 
 from src.modules.delete_user.app.delete_user_usecase import DeleteUserUsecase
@@ -13,7 +14,7 @@ class Test_DeleteUserUsecase:
 
         lenBefore = len(repo.users)
 
-        user = usecase(1)
+        user = usecase(uuid.UUID('5b20bcf8-f467-4569-83f2-1744534c162a'))
 
         assert len(repo.users) == lenBefore - 1
 
@@ -22,11 +23,4 @@ class Test_DeleteUserUsecase:
         usecase = DeleteUserUsecase(repo)
 
         with pytest.raises(NoItemsFound):
-            user = usecase(69)
-
-    def test_delete_user_invalid_id(self):
-        repo = UserRepositoryMock()
-        usecase = DeleteUserUsecase(repo)
-
-        with pytest.raises(EntityError):
-            user = usecase("invalid")
+            user = usecase(uuid.uuid4())

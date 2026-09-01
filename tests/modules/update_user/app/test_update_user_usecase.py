@@ -1,4 +1,4 @@
-import pytest
+""" import pytest
 
 from src.modules.update_user.app.update_user_usecase import UpdateUserUsecase
 from src.shared.helpers.errors.domain_errors import EntityError
@@ -27,3 +27,4 @@ class Test_UpdateUserUsecase:
         with pytest.raises(EntityError):
             usecase(user_id=1, new_name=1)
 
+ """

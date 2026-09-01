@@ -5,18 +5,13 @@ from src.shared.domain.enums.state_enum import STATE
 
 class Test_GetUserViewModel:
     def test_get_user_viewmodel(self):
-        user = User(
-            user_id=1,
-            name="Vitor Soller",
-            email="vitinho@hype.com",
-            state=STATE.APPROVED
-        )
+        user = User(email="teste@teste.com", role="admin")
+        user_id = str(user.user_id)
         userViewmodel = GetUserViewmodel(user=user).to_dict()
 
-        expected = {'user_id': 1,
-                    'name': 'Vitor Soller',
-                    'email': 'vitinho@hype.com',
-                    'state': 'APPROVED',
+        expected = {'user_id': user_id,
+                    'email': 'teste@teste.com',
+                    'role': 'admin',
                     'message': 'the user was retrieved successfully'}
 
         assert expected == userViewmodel

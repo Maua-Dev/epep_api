@@ -1,3 +1,4 @@
+from uuid import UUID
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
 from .delete_user_usecase import DeleteUserUsecase
@@ -17,17 +18,20 @@ class DeleteUserController:
             if request.data.get('user_id') is None:
                 raise MissingParameters('user_id')
 
-            if type(request.data.get('user_id')) != str:
+            if not isinstance(request.data.get('user_id'), str):
                 raise WrongTypeParameter(
                     fieldName="user_id",
                     fieldTypeExpected="str",
                     fieldTypeReceived=request.data.get('user_id').__class__.__name__
                 )
-            if not request.data.get('user_id').isdecimal():
-                raise EntityError("user_id")
+
+            try:
+                user_id = UUID(request.data.get('user_id'))
+            except:
+                raise EntityError('user_id')
 
             user = self.DeleteUserUsecase(
-                user_id=int(request.data.get('user_id'))
+                user_id=user_id
             )
 
             viewmodel = DeleteUserViewmodel(user=user)
