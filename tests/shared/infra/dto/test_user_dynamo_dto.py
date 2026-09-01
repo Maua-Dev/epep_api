@@ -1,4 +1,4 @@
-""" from src.shared.domain.enums.role_enum import ROLE
+from src.shared.domain.enums.role_enum import ROLE
 from src.shared.infra.dto.template_dynamo_dto import UserDynamoDTO
 from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
 
@@ -24,4 +24,3 @@ class Test_UserDynamoDTO:
         assert restored.user_id == user.user_id
         assert restored.email == user.email
         assert restored.role == ROLE.USER
- """
