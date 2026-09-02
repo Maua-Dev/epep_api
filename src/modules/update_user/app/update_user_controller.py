@@ -1,3 +1,4 @@
+from uuid import UUID
 from src.shared.helpers.external_interfaces.external_interface import IResponse, IRequest
 from .update_user_usecase import UpdateUserUsecase
 from .update_user_viewmodel import UpdateUserViewmodel
@@ -16,17 +17,38 @@ class UpdateUserController:
         try:
             if request.data.get('user_id') is None:
                 raise MissingParameters('user_id')
-            if request.data.get('new_name') is None:
-                raise MissingParameters('new_name')
 
-            if type(request.data.get('user_id')) != str:
+            if not isinstance(request.data.get('user_id'), str):
                 raise WrongTypeParameter(
                     fieldName="user_id",
                     fieldTypeExpected="str",
                     fieldTypeReceived=request.data.get('user_id').__class__.__name__
                 )
 
-            user = self.UpdateUserUsecase(user_id=int(request.data.get('user_id')), new_name=request.data.get('new_name'))
+            if request.data.get('new_email') is not None and not isinstance(request.data.get('new_email'), str):
+                raise WrongTypeParameter(
+                    fieldName="new_email",
+                    fieldTypeExpected="str",
+                    fieldTypeReceived=request.data.get('new_email').__class__.__name__
+                )
+            
+            if request.data.get('new_role') is not None and not isinstance(request.data.get('new_role'), str):
+                raise WrongTypeParameter(
+                    fieldName="new_role",
+                    fieldTypeExpected="str",
+                    fieldTypeReceived=request.data.get('new_role').__class__.__name__
+                )
+            
+            try:
+                user_id = UUID(request.data.get('user_id'))
+            except ValueError:
+                EntityError('user_id')
+
+            user = self.UpdateUserUsecase(
+                user_id=user_id,
+                new_email=request.data.get('new_email'),
+                new_role=request.data.get('new_role')
+                )
 
             viewmodel = UpdateUserViewmodel(user=user)
 
