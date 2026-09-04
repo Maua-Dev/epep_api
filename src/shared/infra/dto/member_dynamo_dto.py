@@ -1,48 +1,35 @@
-from pydantic import BaseModel, ConfigDict, HttpUrl
-import uuid
-
 from src.shared.domain.entities.member import Member
-from src.shared.domain.enums.member_function_enum import MemberFunctionEnum
+from src.shared.infra.external.dynamo.dynamo_keys import (
+    EntityKind,
+    partition_key,
+    sort_key,
+    strip_keys,
+)
 
-class MemberDynamoDTO(BaseModel):
-    model_config = ConfigDict(use_enum_values=True)
 
-    entity: str = "member"
-    member_id: uuid.UUID
-    name: str
-    member_function: MemberFunctionEnum
-    linkedin: HttpUrl
-    member_photo: HttpUrl
-    description: str
-
-    @staticmethod
-    def from_entity(member: Member) -> "MemberDynamoDTO":
-        """
-        Parse data from Member to MemberDynamoDTO
-        """
-        return MemberDynamoDTO.model_validate(member, from_attributes=True)
-
-    def to_dynamo(self) -> dict:
-        """
-        Parse data from MemberDynamoDTO to dict
-        """
-        data = self.model_dump()
-        data["member_id"] = str(data["member_id"])
-        data["linkedin"] = str(data["linkedin"])
-        data["member_photo"] = str(data["member_photo"])
-
-        return data
+class MemberDynamoDTO:
+    """
+    DTO Dynamo: serializa entidade via model_dump + keys da single-table.
+    """
 
     @staticmethod
-    def from_dynamo(member_data: dict) -> "MemberDynamoDTO":
+    def from_entity_to_dynamo(member: Member) -> dict:
         """
-        Parse data from DynamoDB to MemberDynamoDTO
-        @param user_data: dict from DynamoDB
-        """
-        return MemberDynamoDTO.model_validate(member_data)
+        Converts a Member entity to a dictionary compatible with DynamoDB.
 
-    def to_entity(self) -> Member:
+        Includes base keys (pk/sk).
         """
-        Parse data from MemberDynamoDTO to Member
+        return {
+            **member.model_dump(mode="json"),
+            "pk": partition_key(kind=EntityKind.MEMBER),
+            "sk": sort_key(id=member.member_id, kind=EntityKind.MEMBER),
+        }
+
+    @staticmethod
+    def from_dynamo_to_entity(member_data: dict) -> Member:
         """
-        return Member.model_validate(self, from_attributes=True)
+        Converts a DynamoDB item dict into a Member entity.
+
+        Storage keys (pk/sk) are stripped before model_validate.
+        """
+        return Member.model_validate(obj=strip_keys(member_data))
