@@ -16,6 +16,10 @@ class DuplicatedUser(BaseError):
     def __init__(self, message: str):
         super().__init__(f'The user already exists for this {message}')
 
+class DuplicatedMember(BaseError):
+    def __init__(self, message: str):
+        super().__init__(f'The member already exists for this {message}')
+
 class ForbiddenAction(BaseError):
     def __init__(self, message: str):
         super().__init__(f'That action is forbidden for this {message}')

@@ -24,7 +24,7 @@ class Environments:
     stage: STAGE
     s3_bucket_name: str
     region: str
-    endpoint_url: str = None
+    dynamo_endpoint_url: str = None  # DynamoDB Local (ex: http://localhost:8000); None na AWS
     dynamo_table_name: str
     dynamo_partition_key: str
     dynamo_sort_key: str
@@ -46,16 +46,16 @@ class Environments:
         if self.stage == STAGE.TEST:
             self.s3_bucket_name = "bucket-test"
             self.region = "sa-east-1"
-            self.endpoint_url = "http://localhost:8000"
+            self.dynamo_endpoint_url = "http://localhost:8000"
             self.dynamo_table_name = "user_mss_template-table"
-            self.dynamo_partition_key = "PK"
-            self.dynamo_sort_key = "SK"
+            self.dynamo_partition_key = "pk"
+            self.dynamo_sort_key = "sk"
             self.cloud_front_distribution_domain = "https://d3q9q9q9q9q9q9.cloudfront.net"
 
         else:
             self.s3_bucket_name = os.environ.get("S3_BUCKET_NAME")
             self.region = os.environ.get("REGION")
-            self.endpoint_url = os.environ.get("ENDPOINT_URL")
+            self.dynamo_endpoint_url = os.environ.get("DYNAMO_ENDPOINT_URL")
             self.dynamo_table_name = os.environ.get("DYNAMO_TABLE_NAME")
             self.dynamo_partition_key = os.environ.get("DYNAMO_PARTITION_KEY")
             self.dynamo_sort_key = os.environ.get("DYNAMO_SORT_KEY")
@@ -67,8 +67,8 @@ class Environments:
             from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
             return UserRepositoryMock
         elif Environments.get_envs().stage in [STAGE.DEV, STAGE.HOMOLOG, STAGE.PROD]:
-            from src.shared.infra.repositories.user_repository_dynamo import UserRepositoryDynamo
-            return UserRepositoryDynamo
+            from src.shared.infra.repositories.template_repository_dynamo import TemplateRepositoryDynamo
+            return TemplateRepositoryDynamo
         else:
             raise Exception("No repository found for this stage")
 
@@ -86,7 +86,7 @@ class Environments:
     def get_envs() -> "Environments":
         """
         Returns the Environments object. This method should be used to get the Environments object instead of instantiating it directly.
-        :return: Environments (stage={self.stage}, s3_bucket_name={self.s3_bucket_name}, region={self.region}, endpoint_url={self.endpoint_url})
+        :return: Environments (stage={self.stage}, region={self.region}, dynamo_table_name={self.dynamo_table_name}, dynamo_endpoint_url={self.dynamo_endpoint_url})
 
         """
         envs = Environments()
