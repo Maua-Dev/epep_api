@@ -1,6 +1,7 @@
 import uuid
 
 from src.shared.domain.enums.member_function_enum import MemberFunctionEnum
+from src.shared.domain.enums.member_status_enum import MemberStatusEnum
 from src.shared.infra.dto.member_dynamo_dto import MemberDynamoDTO
 from src.shared.infra.repositories.member_repository_mock import MemberRepositoryMock
 
@@ -13,9 +14,10 @@ class Test_MemberDynamoDTO:
         assert data["pk"] == "MEMBER"
         assert data["sk"] == f"MEMBER#{member.member_id}"
         assert data["name"] == member.name
-        assert data["member_function"] == MemberFunctionEnum.MARKETING.value
+        assert data["function"] == MemberFunctionEnum.MARKETING.value
+        assert data["status"] == MemberStatusEnum.ATIVO.value
         assert data["linkedin"] == str(member.linkedin)
-        assert data["member_photo"] == str(member.member_photo)
+        assert data["photo"] == str(member.photo)
         assert data["description"] == member.description
         assert "member_id" in data
 
@@ -26,7 +28,8 @@ class Test_MemberDynamoDTO:
 
         assert restored.member_id == member.member_id
         assert restored.name == member.name
-        assert restored.member_function == MemberFunctionEnum.REDACAO.value
+        assert restored.function == MemberFunctionEnum.REDACAO.value
+        assert restored.status == MemberStatusEnum.CONGELADO.value
         assert str(restored.linkedin) == str(member.linkedin)
-        assert str(restored.member_photo) == str(member.member_photo)
+        assert str(restored.photo) == str(member.photo)
         assert restored.description == member.description
