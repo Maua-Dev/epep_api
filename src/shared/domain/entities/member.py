@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field, ValidationError, HttpUrl, ConfigDict, fie
 
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.domain.enums.member_function_enum import MemberFunctionEnum
+from src.shared.domain.enums.member_status_enum import MemberStatusEnum
 
 class Member(BaseModel):
     def __init__(self, **data):
@@ -26,9 +27,15 @@ class Member(BaseModel):
     )
 
 
-    member_function: MemberFunctionEnum = Field(
+    function: MemberFunctionEnum = Field(
         ...,
         description="Cargo do membro"
+    )
+
+
+    status: MemberStatusEnum = Field(
+        ...,
+        description="Status do membro"
     )
 
 
@@ -38,16 +45,16 @@ class Member(BaseModel):
     )
 
 
-    member_photo: HttpUrl = Field(
+    photo: HttpUrl = Field(
         ...,
         description="Foto do membro"
     )
-    @field_validator("member_photo")
+    @field_validator("photo")
     @classmethod
     def validate_photo_extension(cls, url: HttpUrl) -> HttpUrl:
         allowed_extensions = (".png", ".jpg", ".jpeg", ".webp")
         if not str(url).lower().endswith(allowed_extensions):
-            raise ValueError("member_photo must end with .png, .jpg, .jpeg, or .webp")
+            raise ValueError("photo must end with .png, .jpg, .jpeg, or .webp")
         return url
     # Checks the URL's extension format, but not its content. It can still be a non-existent URL, for example
     
