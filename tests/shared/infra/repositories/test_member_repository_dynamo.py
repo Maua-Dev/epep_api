@@ -8,7 +8,7 @@ from src.shared.infra.repositories.member_repository_mock import MemberRepositor
 
 class Test_MemberRepositoryDynamo:
 
-    @pytest.mark.skip(reason="Needs dynamoDB")
+    #@pytest.mark.skip(reason="Needs dynamoDB")
     def test_create_member(self):
         os.environ["STAGE"] = "TEST"
 
@@ -19,7 +19,7 @@ class Test_MemberRepositoryDynamo:
         assert member_repository_mock.members[0].name == resp.name
 
 
-    @pytest.mark.skip(reason="Needs dynamoDB")
+    #@pytest.mark.skip(reason="Needs dynamoDB")
     def test_get_member(self):
         os.environ["STAGE"] = "TEST"
 
@@ -32,7 +32,7 @@ class Test_MemberRepositoryDynamo:
         assert created.name == resp.name
 
 
-    @pytest.mark.skip(reason="Needs dynamoDB")
+    #@pytest.mark.skip(reason="Needs dynamoDB")
     def test_delete_member(self):
         os.environ["STAGE"] = "TEST"
 
@@ -45,7 +45,7 @@ class Test_MemberRepositoryDynamo:
         assert created.name == resp.name
 
 
-    @pytest.mark.skip(reason="Needs dynamoDB")
+    #@pytest.mark.skip(reason="Needs dynamoDB")
     def test_get_all_member(self):
         os.environ["STAGE"] = "TEST"
 
@@ -58,7 +58,7 @@ class Test_MemberRepositoryDynamo:
         assert any(m.member_id == created.member_id for m in resp)
 
 
-    @pytest.mark.skip(reason="Needs dynamoDB")
+    #@pytest.mark.skip(reason="Needs dynamoDB")
     def test_update_member(self):
         os.environ["STAGE"] = "TEST"
 
@@ -70,9 +70,10 @@ class Test_MemberRepositoryDynamo:
         updated_member = Member(
             member_id=created.member_id,
             name="Nome do Membro Atualizado",
-            member_function=created.member_function,
+            function=created.function,
+            status=created.status,
             linkedin=created.linkedin,
-            member_photo=created.member_photo,
+            photo=created.photo,
             description=created.description
         )
         resp = member_repository.update_member(updated_member)
