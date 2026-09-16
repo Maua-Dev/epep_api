@@ -41,7 +41,7 @@ class Test_UpdateUserController:
         assert response.body == "Field user_id is missing"
 
 
-    def test_update_user_controller_invalid_user_id(self):
+    def test_update_user_controller_invalid_type_user_id(self):
         repo = UserRepositoryMock()
         usecase = UpdateUserUsecase(repo=repo)
         controller = UpdateUserController(usecase=usecase)
@@ -54,7 +54,22 @@ class Test_UpdateUserController:
         response = controller(request=request)
 
         assert response.status_code == 400
-        assert response.body == "Field user_id isn't in the right type.\n Received: int.\n Expected: str"\
+        assert response.body == "Field user_id isn't in the right type.\n Received: int.\n Expected: str"
+
+    def test_update_user_controller_invalid_user_id(self):
+        repo = UserRepositoryMock()
+        usecase = UpdateUserUsecase(repo=repo)
+        controller = UpdateUserController(usecase=usecase)
+
+        request = HttpRequest(body={
+            'user_id': 'a',
+            'new_email': 'user@epep.com'
+        })
+
+        response = controller(request=request)
+
+        assert response.status_code == 400
+        assert response.body == 'Field user_id is not valid'
         
     def test_update_user_controller_invalid_email_type(self):
         repo = UserRepositoryMock()

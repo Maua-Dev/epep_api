@@ -42,7 +42,7 @@ class UpdateUserController:
             try:
                 user_id = UUID(request.data.get('user_id'))
             except ValueError:
-                EntityError('user_id')
+                raise EntityError('user_id')
 
             user = self.UpdateUserUsecase(
                 user_id=user_id,

@@ -3,10 +3,7 @@ from src.shared.domain.enums.state_enum import STATE
 
 
 class UpdateUserViewmodel:
-    user_id: int
-    name: str
-    email: str
-    state: STATE
+    user: User
 
     def __init__(self, user: User):
         self.user = user
