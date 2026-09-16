@@ -3,23 +3,12 @@ from src.shared.domain.enums.state_enum import STATE
 
 
 class UpdateUserViewmodel:
-    user_id: int
-    name: str
-    email: str
-    state: STATE
+    user: User
 
     def __init__(self, user: User):
-        self.user_id = user.user_id
-        self.name = user.name
-        self.email = user.email
-        self.state = user.state
+        self.user = user
 
     def to_dict(self):
-        return {
-            'user_id': self.user_id,
-            'name': self.name,
-            'email': self.email,
-            'state': self.state.value,
-            'message': "the user was updated successfully"
-        }
-
+        data = self.user.model_dump(mode='json')
+        data.update({'message': "the user was updated successfully"})
+        return data
