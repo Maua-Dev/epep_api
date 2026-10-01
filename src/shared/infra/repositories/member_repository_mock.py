@@ -13,16 +13,18 @@ class MemberRepositoryMock(IMemberRepository):
         self.members = [
             Member(
                 name="Nome do Membro Um",
-                member_function="Marketing",
+                function="Marketing",
+                status="Ativo",
                 linkedin="https://www.linkedin.com/1",
-                member_photo="https://portalinterno.devmaua.com/assets/logo_fake1.png",
+                photo="https://portalinterno.devmaua.com/assets/logo_fake1.png",
                 description="Exemplo de descrição do membro 1"
             ),
             Member(
                 name="Nome do Membro Dois",
-                member_function="Redacao",
+                function="Redacao",
+                status="Congelado",
                 linkedin="https://www.linkedin.com/2",
-                member_photo="https://portalinterno.devmaua.com/assets/logo_fake2.png",
+                photo="https://portalinterno.devmaua.com/assets/logo_fake2.png",
                 description="Exemplo de descrição do membro 2"
             )
         ]

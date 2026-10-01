@@ -13,16 +13,18 @@ class Test_MemberRepositoryMock:
         repo = MemberRepositoryMock()
         member = Member(
             name="Membro Três",
-            member_function="Marketing",
+            function="Marketing",
+            status="Desativado",
             linkedin="https://www.linkedin.com/3",
-            member_photo="https://portalinterno.devmaua.com/assets/logo_fake3.png",
+            photo="https://portalinterno.devmaua.com/assets/logo_fake3.png",
             description="Descrição do terceiro membro do repo"
         )
         repo.create_member(member)
         assert repo.members[-1].name == "Membro Três"
-        assert repo.members[-1].member_function == "Marketing"
+        assert repo.members[-1].function == "Marketing"
+        assert repo.members[-1].status == "Desativado"
         assert str(repo.members[-1].linkedin) =="https://www.linkedin.com/3"
-        assert str(repo.members[-1].member_photo) =="https://portalinterno.devmaua.com/assets/logo_fake3.png"
+        assert str(repo.members[-1].photo) =="https://portalinterno.devmaua.com/assets/logo_fake3.png"
         assert repo.members[-1].description =="Descrição do terceiro membro do repo"
         assert len(repo.members) == 3
 
@@ -33,9 +35,10 @@ class Test_MemberRepositoryMock:
         member = repo.get_member(member_id)
 
         assert member.name == "Nome do Membro Dois"
-        assert member.member_function == "Redacao"
+        assert member.function == "Redacao"
+        assert member.status == "Congelado"
         assert str(member.linkedin) == "https://www.linkedin.com/2"
-        assert str(member.member_photo) == "https://portalinterno.devmaua.com/assets/logo_fake2.png"
+        assert str(member.photo) == "https://portalinterno.devmaua.com/assets/logo_fake2.png"
         assert member.description == "Exemplo de descrição do membro 2"
 
 
@@ -56,24 +59,50 @@ class Test_MemberRepositoryMock:
         repo = MemberRepositoryMock()
         member = repo.get_all_member()[0]
 
-        member_old_function = member.member_function
+        member_old_function = member.function
         member_name = member.name
 
         member = Member(
             member_id=member.member_id,
             name=member.name,
-            member_function="Redacao",
+            function="Projetos",
+            status=member.status,
             linkedin=member.linkedin,
-            member_photo=member.member_photo,
+            photo=member.photo,
             description=member.description
         )
         updated_member = repo.update_member(member)
 
         assert updated_member is not None
         assert updated_member.name == member_name
-        assert updated_member.member_function != member_old_function
-        assert updated_member.member_function == "Redacao"
-        assert repo.members[0].member_function == "Redacao"
+        assert updated_member.function != member_old_function
+        assert updated_member.function == "Projetos"
+        assert repo.members[0].function == "Projetos"
+
+
+    def test_update_member_status(self):
+            repo = MemberRepositoryMock()
+            member = repo.get_all_member()[0]
+    
+            member_old_status = member.status
+            member_name = member.name
+    
+            member = Member(
+                member_id=member.member_id,
+                name=member.name,
+                function=member.function,
+                status="Desativado",
+                linkedin=member.linkedin,
+                photo=member.photo,
+                description=member.description
+            )
+            updated_member = repo.update_member(member)
+    
+            assert updated_member is not None
+            assert updated_member.name == member_name
+            assert updated_member.status != member_old_status
+            assert updated_member.status == "Desativado"
+            assert repo.members[0].status == "Desativado"
 
 
     def test_update_member_linkedin(self):
@@ -86,9 +115,10 @@ class Test_MemberRepositoryMock:
         member = Member(
             member_id=member.member_id,
             name=member.name,
-            member_function=member.member_function,
+            function=member.function,
+            status=member.status,
             linkedin="https://www.linkedin.com/novo",
-            member_photo=member.member_photo,
+            photo=member.photo,
             description=member.description
         )
         updated_member = repo.update_member(member)
@@ -104,24 +134,25 @@ class Test_MemberRepositoryMock:
         repo = MemberRepositoryMock()
         member = repo.get_all_member()[0]
 
-        member_old_photo = member.member_photo
+        member_old_photo = member.photo
         member_name = member.name
 
         member = Member(
             member_id=member.member_id,
             name=member.name,
-            member_function=member.member_function,
+            function=member.function,
+            status=member.status,
             linkedin=member.linkedin,
-            member_photo="https://www.photo.com/photo1.jpg",
+            photo="https://www.photo.com/photo1.jpg",
             description=member.description
         )
         updated_member = repo.update_member(member)
 
         assert updated_member is not None
         assert updated_member.name == member_name
-        assert updated_member.member_photo != member_old_photo
-        assert str(updated_member.member_photo) == "https://www.photo.com/photo1.jpg"
-        assert str(repo.members[0].member_photo) == "https://www.photo.com/photo1.jpg"
+        assert updated_member.photo != member_old_photo
+        assert str(updated_member.photo) == "https://www.photo.com/photo1.jpg"
+        assert str(repo.members[0].photo) == "https://www.photo.com/photo1.jpg"
 
 
     def test_update_member_description(self):
@@ -134,9 +165,10 @@ class Test_MemberRepositoryMock:
         member = Member(
             member_id=member.member_id,
             name=member.name,
-            member_function=member.member_function,
+            function=member.function,
+            status=member.status,
             linkedin=member.linkedin,
-            member_photo=member.member_photo,
+            photo=member.photo,
             description="Nova descrição do membro"
         )
         updated_member = repo.update_member(member)
@@ -155,10 +187,11 @@ class Test_MemberRepositoryMock:
         member = Member(
             # new member_id
             name=member.name,
-            member_function=member.member_function,
+            function=member.function,
+            status=member.status,
             linkedin=member.linkedin,
-            member_photo=member.member_photo,
-            description="Nova descrição do membro"
+            photo=member.photo,
+            description=member.description
         )
 
         with pytest.raises(NoItemsFound):
