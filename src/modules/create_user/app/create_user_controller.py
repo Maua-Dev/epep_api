@@ -14,13 +14,10 @@ class CreateUserController:
 
     def __call__(self, request: IRequest) -> IResponse:
         try:
-            if request.data.get('name') is None:
-                raise MissingParameters('name')
             if request.data.get('email') is None:
                 raise MissingParameters('email')
-
+            
             user = self.CreateUserUsecase(
-                name=request.data.get('name'),
                 email=request.data.get('email')
             )
 

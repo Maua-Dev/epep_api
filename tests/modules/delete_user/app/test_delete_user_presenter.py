@@ -1,11 +1,12 @@
 import json
 
 from src.modules.delete_user.app.delete_user_presenter import lambda_handler
-
+from src.shared.infra.repositories.user_repository_mock import UserRepositoryMock
 
 class Test_DeleteUserPresenter:
 
     def test_delete_user(self):
+        repo = UserRepositoryMock()
         event = {
             "version": "2.0",
             "routeKey": "$default",
@@ -52,7 +53,7 @@ class Test_DeleteUserPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"user_id": "1"}',
+            "body": '{"user_id": "5b20bcf8-f467-4569-83f2-1744534c162a"}',
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -60,11 +61,12 @@ class Test_DeleteUserPresenter:
 
         response = lambda_handler(event, None)
 
-        expected = {'user_id': 1,
-                     'name': 'Bruno Soller',
-                     'email': 'soller@soller.com',
-                     'state': 'APPROVED',
-                     'message': 'the user was deleted successfully'}
+        expected = {
+            'user_id': '5b20bcf8-f467-4569-83f2-1744534c162a',
+            'email': 'admin@example.com',
+            'role': 'admin',
+            'message': 'the user was deleted successfully'
+            }
 
         assert json.loads(response["body"]) == expected
         assert response["statusCode"] == 200
