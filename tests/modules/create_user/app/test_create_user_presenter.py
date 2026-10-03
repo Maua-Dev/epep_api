@@ -1,4 +1,4 @@
-""" import json
+import json
 
 from src.modules.create_user.app.create_user_presenter import lambda_handler
 
@@ -52,7 +52,7 @@ class Test_CreateUserPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"name":"EhOLudjas",  "email":"eho@ludjas.com"}',
+            "body": '{"email":"eho@ludjas.com"}',
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -119,4 +119,3 @@ class Test_CreateUserPresenter:
 
         assert response["statusCode"] == 201
         assert json.loads(response["body"])["message"] == "the user was created successfully"
- """
