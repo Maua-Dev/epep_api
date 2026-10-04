@@ -85,8 +85,8 @@ class Test_UpdateUserController:
 
         assert response.status_code == 400
         assert response.body == "The field 'new_email' has the wrong type. Received: 'int'. Expected: 'str'."
-
-    def test_update_user_controller_invalid_role(self):
+    
+    def test_update_user_controller_invalid_role_type(self):
         repo = UserRepositoryMock()
         usecase = UpdateUserUsecase(repo=repo)
         controller = UpdateUserController(usecase=usecase)
@@ -100,6 +100,67 @@ class Test_UpdateUserController:
 
         assert response.status_code == 400
         assert response.body == "The field 'new_role' has the wrong type. Received: 'int'. Expected: 'str'."
+        
+    def test_update_user_controller_invalid_name_type(self):
+        repo = UserRepositoryMock()
+        usecase = UpdateUserUsecase(repo=repo)
+        controller = UpdateUserController(usecase=usecase)
+
+        request = HttpRequest(body={
+            'user_id': "5b20bcf8-f467-4569-83f2-1744534c162a",
+            'new_name': 1
+        })
+
+        response = controller(request=request)
+
+        assert response.status_code == 400
+        assert response.body == "The field 'new_name' has the wrong type. Received: 'int'. Expected: 'str'."
+
+    def test_update_user_controller_invalid_email(self):
+        repo = UserRepositoryMock()
+        usecase = UpdateUserUsecase(repo=repo)
+        controller = UpdateUserController(usecase=usecase)
+
+        request = HttpRequest(body={
+            'user_id': "5b20bcf8-f467-4569-83f2-1744534c162a",
+            'new_email': 'epep@epep'
+        })
+
+        response = controller(request=request)
+
+        assert response.status_code == 400
+        assert response.body == "Field email is not valid"
+    
+    def test_update_user_controller_invalid_name(self):
+        repo = UserRepositoryMock()
+        usecase = UpdateUserUsecase(repo=repo)
+        controller = UpdateUserController(usecase=usecase)
+
+        request = HttpRequest(body={
+            'user_id': "5b20bcf8-f467-4569-83f2-1744534c162a",
+            'new_name': 'a'
+        })
+
+        response = controller(request=request)
+
+        assert response.status_code == 400
+        assert response.body == "Field name is not valid"
+
+    
+    def test_update_user_controller_invalid_role(self):
+        repo = UserRepositoryMock()
+        usecase = UpdateUserUsecase(repo=repo)
+        controller = UpdateUserController(usecase=usecase)
+
+        request = HttpRequest(body={
+            'user_id': "5b20bcf8-f467-4569-83f2-1744534c162a",
+            'new_role': 'a'
+        })
+
+        response = controller(request=request)
+
+        assert response.status_code == 400
+        assert response.body == "Field role is not valid"
 
     def test_update_user_not_found(self):
         repo = UserRepositoryMock()

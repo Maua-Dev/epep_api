@@ -9,12 +9,14 @@ class Test_CreateUserViewModel:
         user_id = uuid4()
         user = User(
             user_id=user_id,
+            name="Vitor",
             email="vitinho@hype.com",
             role=ROLE.ADMIN
         )
         userViewmodel = CreateUserViewmodel(user=user).to_dict()
 
         expected = {'user_id': str(user_id),
+                    'name': 'Vitor',
                     'email': 'vitinho@hype.com',
                     'role': 'admin',
                     'message': 'the user was created successfully'}

@@ -10,12 +10,14 @@ class UpdateUserUsecase:
     def __call__(
             self, 
             user_id: UUID, 
+            new_name: str | None = None,
             new_email: str | None = None, 
             new_role: str | None = None
             ) -> User:
         stored_user = self.repo.get_user(user_id=user_id)
         user = User(
             user_id=user_id,
+            name=new_name or stored_user.name,
             email=new_email or stored_user.email,
             role=new_role or stored_user.role
             )

@@ -5,11 +5,12 @@ from src.shared.domain.enums.state_enum import STATE
 
 class Test_GetUserViewModel:
     def test_get_user_viewmodel(self):
-        user = User(email="teste@teste.com", role="admin")
+        user = User(name="Teste", email="teste@teste.com", role="admin")
         user_id = str(user.user_id)
         userViewmodel = GetUserViewmodel(user=user).to_dict()
 
         expected = {'user_id': user_id,
+                    'name': 'Teste',
                     'email': 'teste@teste.com',
                     'role': 'admin',
                     'message': 'the user was retrieved successfully'}

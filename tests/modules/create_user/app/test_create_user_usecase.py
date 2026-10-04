@@ -11,7 +11,7 @@ class Test_CreateUserUsecase:
         repo = UserRepositoryMock()
         usecase = CreateUserUsecase(repo)
 
-        user = usecase(email="branco@branco.branco")
+        user = usecase(name="Branco", email="branco@branco.com")
 
         assert repo.users[-1] == user
 
@@ -20,4 +20,4 @@ class Test_CreateUserUsecase:
         usecase = CreateUserUsecase(repo)
 
         with pytest.raises(EntityError):
-            user = usecase( email="branco@brancobranco")
+            user = usecase(name="Branco", email="branco@branco")

@@ -11,12 +11,14 @@ class Test_CreateUserControler:
         controller = CreateUserController(usecase=usecase)
 
         request = HttpRequest(body={
+            'name': 'Branco',
             'email': 'branco@branco.com'
         })
 
         response = controller(request=request)
 
         assert response.status_code == 201
+        assert response.body['name'] == repo.users[-1].name
         assert response.body['email'] == repo.users[-1].email
         assert response.body['message'] == "the user was created successfully"
 
@@ -25,7 +27,7 @@ class Test_CreateUserControler:
         usecase = CreateUserUsecase(repo=repo)
         controller = CreateUserController(usecase=usecase)
 
-        request = HttpRequest(body={})
+        request = HttpRequest(body={'name': 'Vitor'})
 
         response = controller(request=request)
 
@@ -38,6 +40,7 @@ class Test_CreateUserControler:
         controller = CreateUserController(usecase=usecase)
 
         request = HttpRequest(body={
+            'name': "Branco",
             'email': 'branco@branco'
             })
 

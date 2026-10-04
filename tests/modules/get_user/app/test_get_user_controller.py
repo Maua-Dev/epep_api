@@ -21,6 +21,7 @@ class Test_GetUserController:
 
         assert response.status_code == 200
         assert response.body['user_id'] == str(repo.users[1].user_id)
+        assert response.body['name']
         assert response.body['email'] == repo.users[1].email
         assert response.body['role'] == repo.users[1].role
 
