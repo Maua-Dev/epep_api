@@ -65,6 +65,66 @@ class Test_UpdateUserPresenter:
         assert json.loads(response["body"])['email'] == 'admin@epep.com'
 
     
+    def test_update_user_name(self):
+        event = {
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/my/path",
+            "rawQueryString": "parameter1=value1&parameter1=value2&parameter2=value",
+            "cookies": [
+                "cookie1",
+                "cookie2"
+            ],
+            "headers": {
+                "header1": "value1",
+                "header2": "value1,value2"
+            },
+            "queryStringParameters": {
+                "parameter1": "1"
+            },
+            "requestContext": {
+                "accountId": "123456789012",
+                "apiId": "<urlid>",
+                "authentication": None,
+                "authorizer": {
+                    "iam": {
+                        "accessKey": "AKIA...",
+                        "accountId": "111122223333",
+                        "callerId": "AIDA...",
+                        "cognitoIdentity": None,
+                        "principalOrgId": None,
+                        "userArn": "arn:aws:iam::111122223333:user/example-user",
+                        "userId": "AIDA..."
+                    }
+                },
+                "domainName": "<url-id>.lambda-url.us-west-2.on.aws",
+                "domainPrefix": "<url-id>",
+                "external_interfaces": {
+                    "method": "POST",
+                    "path": "/my/path",
+                    "protocol": "HTTP/1.1",
+                    "sourceIp": "123.123.123.123",
+                    "userAgent": "agent"
+                },
+                "requestId": "id",
+                "routeKey": "$default",
+                "stage": "$default",
+                "time": "12/Mar/2020:19:03:58 +0000",
+                "timeEpoch": 1583348638390
+            },
+            "body": '{"user_id": "5b20bcf8-f467-4569-83f2-1744534c162a",  "new_name": "Leo"}',
+            "pathParameters": None,
+            "isBase64Encoded": None,
+            "stageVariables": None
+        }
+
+        response = lambda_handler(event, None)
+
+
+        assert response["statusCode"] == 200
+        assert json.loads(response["body"])['name'] == 'Leo'
+
+
     def test_update_user_role(self):
         event = {
             "version": "2.0",
@@ -125,7 +185,7 @@ class Test_UpdateUserPresenter:
         assert json.loads(response["body"])['role'] == 'user'
 
     
-    def test_update_user_role_and_email(self):
+    def test_update_user_role_email_name(self):
         event = {
             "version": "2.0",
             "routeKey": "$default",
@@ -172,7 +232,7 @@ class Test_UpdateUserPresenter:
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
             },
-            "body": '{"user_id": "5b20bcf8-f467-4569-83f2-1744534c162a", "new_email": "admin@epep.com",  "new_role": "user"}',
+            "body": '{"user_id": "5b20bcf8-f467-4569-83f2-1744534c162a", "new_email": "pedro@epep.com", "new_name": "Pedro",  "new_role": "user"}',
             "pathParameters": None,
             "isBase64Encoded": None,
             "stageVariables": None
@@ -182,7 +242,8 @@ class Test_UpdateUserPresenter:
 
 
         assert response["statusCode"] == 200
-        assert json.loads(response["body"])['email'] == 'admin@epep.com'
+        assert json.loads(response["body"])['name'] == 'Pedro'
+        assert json.loads(response["body"])['email'] == 'pedro@epep.com'
         assert json.loads(response["body"])['role'] == 'user'
 
     

@@ -6,12 +6,13 @@ from src.shared.domain.enums.role_enum import ROLE
 class Test_UpadateUserViewmodel:
     def test_update_user_viewmodel(self):
         
-        user = User(email="teste@test.com", role=ROLE.ADMIN)
+        user = User(name='Pedro', email="teste@test.com", role=ROLE.ADMIN)
 
         updated_user_viewmodel = UpdateUserViewmodel(user)
 
         expected = {
             'user_id': str(user.user_id),
+            'name': 'Pedro',
             'email': "teste@test.com",
             'role': "admin",
             'message': "the user was updated successfully"

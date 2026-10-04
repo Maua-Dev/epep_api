@@ -11,15 +11,17 @@ class Test_UpdateUserUsecase:
         usecase = UpdateUserUsecase(repo=repo)
         updated_user = usecase(
             user_id=UUID('5b20bcf8-f467-4569-83f2-1744534c162a'), 
+            new_name="Admin",
             new_email="admin@epep.com", 
             new_role='user'
             )
 
+        assert updated_user.name == "Admin"
         assert updated_user.email == "admin@epep.com"
         assert updated_user.role == "user"
 
 
-    def test_update_user_usecase_wrong_new_email(self):
+    def test_update_user_usecase_invalid_new_email(self):
         repo = UserRepositoryMock()
         usecase = UpdateUserUsecase(repo=repo)
 
@@ -28,8 +30,18 @@ class Test_UpdateUserUsecase:
                 user_id=UUID('5b20bcf8-f467-4569-83f2-1744534c162a'), 
                 new_email=1
                 )
+            
+    def test_update_user_usecase_invalid_new_name(self):
+        repo = UserRepositoryMock()
+        usecase = UpdateUserUsecase(repo=repo)
 
-    def test_update_user_usecase_wrong_new_role(self):
+        with pytest.raises(EntityError):
+            usecase(
+                user_id=UUID('5b20bcf8-f467-4569-83f2-1744534c162a'), 
+                new_name="a"
+                )
+
+    def test_update_user_usecase_invalid_new_role(self):
         repo = UserRepositoryMock()
         usecase = UpdateUserUsecase(repo=repo)
 
