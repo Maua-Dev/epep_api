@@ -16,9 +16,13 @@ class CreateUserController:
         try:
             if request.data.get('email') is None:
                 raise MissingParameters('email')
+
+            if request.data.get('name') is None:
+                raise MissingParameters('name')
             
             user = self.CreateUserUsecase(
-                email=request.data.get('email')
+                name=request.data.get('name'),
+                email=request.data.get('email'),
             )
 
             viewmodel = CreateUserViewmodel(user)
