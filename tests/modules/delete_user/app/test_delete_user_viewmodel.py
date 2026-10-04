@@ -9,6 +9,7 @@ class Test_DeleteUserViewmodel:
         user_id = uuid.uuid4()
         user = User(
             user_id = user_id,
+            name="Vitor",
             email="21.01444-2@maua.br",
             role=ROLE.ADMIN
             )
@@ -17,6 +18,7 @@ class Test_DeleteUserViewmodel:
 
         expected = {
                     'user_id': str(user_id),
+                    'name': 'Vitor',
                     'email': '21.01444-2@maua.br',
                     'role': 'admin',
                     'message': 'the user was deleted successfully'}
