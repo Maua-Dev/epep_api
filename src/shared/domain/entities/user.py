@@ -17,6 +17,13 @@ class User(BaseModel):
         description="Identificador único de usuário"
     )
 
+    name: str = Field(
+        ...,
+        description="Nome do usuário",
+        min_length=3,
+        examples=["Vitor Soller", "Pedro Sanches"]
+    )
+
     email: EmailStr = Field(
         ...,
         description="Email do usuário",
