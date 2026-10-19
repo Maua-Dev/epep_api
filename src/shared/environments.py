@@ -3,6 +3,7 @@ from enum import Enum
 import os
 from src.shared.domain.observability.observability_interface import IObservability
 
+from src.shared.domain.repositories.member_repository_interface import IMemberRepository
 from src.shared.domain.repositories.user_repository_interface import IUserRepository
 from src.shared.domain.repositories.member_repository_interface import IMemberRepository
 
