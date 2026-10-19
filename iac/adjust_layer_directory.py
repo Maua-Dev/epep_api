@@ -3,11 +3,10 @@ import shutil
 import subprocess
 from pathlib import Path
 
-BUILD_DIRECTORY = "build"
-PYTHON_TOP_LEVEL_DIR = os.path.join(BUILD_DIRECTORY, "python")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+BUILD_DIRECTORY = PROJECT_ROOT / "iac" / "build"
+PYTHON_TOP_LEVEL_DIR = BUILD_DIRECTORY / "python"
 REQUIREMENTS_FILE = "requirements-app.txt"
-
-PROJECT_ROOT = Path(__file__).parent.parent
 SHARED_CODE_SOURCE = os.path.join(PROJECT_ROOT, "src", "shared")
 
 
@@ -18,10 +17,10 @@ def adjust_layer_directory():
     A função junta o código local compartilhado e as dependências externas (pip)
     na estrutura de pastas que a Lambda espera (/python).
     """
-    if os.path.exists(BUILD_DIRECTORY):
+    if BUILD_DIRECTORY.exists():
         shutil.rmtree(BUILD_DIRECTORY)
 
-    shared_code_intermediate_dir = os.path.join(PYTHON_TOP_LEVEL_DIR, "src")
+    shared_code_intermediate_dir = PYTHON_TOP_LEVEL_DIR / "src"
     os.makedirs(shared_code_intermediate_dir)
 
     print(f"Copiando código de: {SHARED_CODE_SOURCE}")
@@ -40,7 +39,7 @@ def adjust_layer_directory():
                 "-r",
                 requirements_path,
                 "-t",
-                PYTHON_TOP_LEVEL_DIR,
+                str(PYTHON_TOP_LEVEL_DIR),
                 "--no-cache-dir",
                 "--platform",
                 "manylinux2014_x86_64",
