@@ -46,6 +46,7 @@ class IacStack(Stack):
                 "GRAPH_MICROSOFT_ENDPOINT",
                 "https://graph.microsoft.com/v1.0/me",
             ),
+            "GOOGLE_CLIENT_ID": os.environ.get("GOOGLE_CLIENT_ID", ""),
         }
 
         self.lambda_construct = LambdaConstruct(
