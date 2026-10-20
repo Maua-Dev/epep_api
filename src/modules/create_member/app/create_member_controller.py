@@ -4,7 +4,7 @@ from .create_member_viewmodel import CreateMemberViewmodel
 from src.shared.helpers.errors.controller_errors import MissingParameters, WrongTypeParameter
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound
-from src.shared.helpers.external_interfaces.http_codes import OK, NotFound, BadRequest, InternalServerError, Created
+from src.shared.helpers.external_interfaces.http_codes import NotFound, BadRequest, InternalServerError, Created
 
 
 class CreateMemberController:
@@ -28,6 +28,41 @@ class CreateMemberController:
 
             if request.data.get('description') is None:
                 raise MissingParameters('description')
+
+            if not isinstance(request.data.get('name'), str):
+                raise WrongTypeParameter(
+                    fieldName="name",
+                    fieldTypeExpected="str",
+                    fieldTypeReceived=request.data.get('name').__class__.__name__
+                )
+ 
+            if not isinstance(request.data.get('function'), str):
+                raise WrongTypeParameter(
+                    fieldName="function",
+                    fieldTypeExpected="str",
+                    fieldTypeReceived=request.data.get('function').__class__.__name__
+                )
+ 
+            if not isinstance(request.data.get('linkedin'), str):
+                raise WrongTypeParameter(
+                    fieldName="linkedin",
+                    fieldTypeExpected="str",
+                    fieldTypeReceived=request.data.get('linkedin').__class__.__name__
+                )
+ 
+            if not isinstance(request.data.get('photo'), str):
+                raise WrongTypeParameter(
+                    fieldName="photo",
+                    fieldTypeExpected="str",
+                    fieldTypeReceived=request.data.get('photo').__class__.__name__
+                )
+ 
+            if not isinstance(request.data.get('description'), str):
+                raise WrongTypeParameter(
+                    fieldName="description",
+                    fieldTypeExpected="str",
+                    fieldTypeReceived=request.data.get('description').__class__.__name__
+                )
 
             member = self.CreateMemberUsecase(
                 name=request.data.get('name'),

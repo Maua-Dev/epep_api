@@ -59,3 +59,21 @@ class Test_CreateMemberController:
 
         assert response.status_code == 400
         assert response.body == "Field name is not valid"
+
+    def test_create_member_controller_wrong_type_description(self):
+        repo = MemberRepositoryMock()
+        usecase = CreateMemberUsecase(repo=repo)
+        controller = CreateMemberController(usecase=usecase)
+ 
+        request = HttpRequest(body={
+            'name': 'Membro Novo',
+            'function': 'Marketing',
+            'linkedin': 'https://www.linkedin.com/novo',
+            'photo': 'https://portalinterno.devmaua.com/assets/novo.png',
+            'description': 1,
+        })
+ 
+        response = controller(request=request)
+ 
+        assert response.status_code == 400
+        assert response.body == "The field 'description' has the wrong type. Received: 'int'. Expected: 'str'."
