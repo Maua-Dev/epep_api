@@ -21,7 +21,8 @@ class User(BaseModel):
         ...,
         description="Nome do usuário",
         min_length=3,
-        examples=["Vitor Soller", "Pedro Sanches"]
+        examples=["Vitor Soller", "Pedro Sanches"],
+        pattern=r"^[a-zA-ZÀ-ÿ\s]+$"
     )
 
     email: EmailStr = Field(

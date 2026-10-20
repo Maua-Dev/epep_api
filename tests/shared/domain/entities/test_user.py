@@ -51,4 +51,5 @@ class Test_User:
     
     def test_name_not_valid(self):
         with pytest.raises(EntityError):
-            User(name="u", email="user@example.com")
+            User(name="user & epep", email="user@example.com")
+
