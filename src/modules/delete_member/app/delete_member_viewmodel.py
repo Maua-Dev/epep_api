@@ -6,14 +6,6 @@ from src.shared.domain.enums.member_status_enum import MemberStatusEnum
 
 
 class DeleteMemberViewmodel:
-    member_id: UUID
-    name: str
-    function: MemberFunctionEnum
-    status: MemberStatusEnum
-    linkedin: HttpUrl
-    photo: HttpUrl
-    description: str
-
     def __init__(self, member: Member):
         self.data = member.model_dump(mode='json')
 
