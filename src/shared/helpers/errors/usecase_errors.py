@@ -23,3 +23,11 @@ class DuplicatedMember(BaseError):
 class ForbiddenAction(BaseError):
     def __init__(self, message: str):
         super().__init__(f'That action is forbidden for this {message}')
+
+class InvalidJwtFormat(BaseError):
+    def __init__(self, message: str):
+        super().__init__(f'Invalid JWT format for {message}')
+
+class EnvVarNotFound(BaseError):
+    def __init__(self, message: str):
+        super().__init__(f'Environment variable not found for {message}')
