@@ -9,16 +9,10 @@ class DeleteUserViewmodel:
     state: STATE
 
     def __init__(self, user: User):
-        self.user_id = user.user_id
-        self.name = user.name
-        self.email = user.email
-        self.state = user.state
+        self.data = user.model_dump(mode='json')
 
     def to_dict(self):
         return {
-            'user_id': self.user_id,
-            'name': self.name,
-            'email': self.email,
-            'state': self.state.value,
+            **self.data,
             'message': "the user was deleted successfully"
         }

@@ -1,24 +1,14 @@
 from src.shared.domain.entities.user import User
-from src.shared.domain.enums.state_enum import STATE
+from src.shared.domain.enums.role_enum import ROLE
 
 
 class GetUserViewmodel:
-    user_id: int
-    name: str
-    email: str
-    state: STATE
+    user: User
 
     def __init__(self, user: User):
-        self.user_id = user.user_id
-        self.name = user.name
-        self.email = user.email
-        self.state = user.state
+        self.user = user
 
     def to_dict(self):
-        return {
-            'user_id': self.user_id,
-            'name': self.name,
-            'email': self.email,
-            'state': self.state.value,
-            'message': "the user was retrieved successfully"
-        }
+        data = self.user.model_dump(mode='json')
+        data.update({'message': "the user was retrieved successfully"})
+        return data

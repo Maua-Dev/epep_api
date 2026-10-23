@@ -38,7 +38,7 @@ Next, you need to configure DynamoDB for your project and Docker compose. Follow
 ```
     cd iac
     cd local
-    docker-compose up -d
+    docker compose up -d
 ```
 
 ### Create virtual enviroments in python (once for project)
@@ -49,7 +49,7 @@ Next, you need to configure DynamoDB for your project and Docker compose. Follow
 
 ###### Linux
 
-    virtualenv -p python3.9 venv
+    virtualenv -p python3.11 venv
 
 ### Activate the venv
 
@@ -81,41 +81,13 @@ Start the DynamoDB Local container using Docker:
 
 ## Running the `load_user_mock_to_dynamo` Script
 
-Finally, you can run the `load_user_mock_to_dynamo` script to load mock data into DynamoDB. Follow the steps below:
+Seed mock `User` data into DynamoDB Local. From the repo root, with `STAGE=TEST`:
 
-1. Locate the directory or file named `load_user_mock_to_dynamo` within your project. This directory or file is responsible for loading mock data into DynamoDB
-2. If the `load_user_mock_to_dynamo` file doesn't exist, you need to create it.
-3. Once you have located or created the `load_user_mock_to_dynamo` file, make sure it is in the correct location within your project structure. The file should be located in the `src/shared/infra/repositories`
 ```bash
-.
-├── iac
-├── src
-│   ├── ...
-│   │     
-│   │    
-│   └── shared
-│       ├── domain
-│       │   └── ...
-│       │   
-│       ├── helpers
-│       │   └── ...
-│       │   
-│       └── infra
-│           ├── dto
-│           ├── external
-│           └── repositories
-│               └── -> [load_user_mock_to_dynamo] <-
-...
+python -m src.shared.infra.repositories.load_user_mock_to_dynamo
 ```
-4. This file is responsible for populating DynamoDB with mock data
-5. Then, make sure you are in the root directory of your project again
-6. Run the following command to execute the script:
-   ```
-   py -m src.shared.infra.repositories.load_user_mock_to_dynamo
-   ```
 
-
-This command will run the `load_user_mock_to_dynamo` script and populate DynamoDB with the provided mock data
+The script lives at `src/shared/infra/repositories/load_user_mock_to_dynamo.py`. It creates the local table if missing, then loads users from `UserRepositoryMock`.
 
 ## Launch NoSQL WorkBench
 
