@@ -9,6 +9,8 @@ import secrets
 import jwt # Biblioteca PyJWT
 from google.oauth2 import id_token as google_id_token
 from google.auth.transport import requests
+import json
+import boto3
 
 
 from src.shared.helpers.errors.usecase_errors import InvalidJwtFormat, EnvVarNotFound
@@ -30,14 +32,25 @@ def _is_jwt_shape(token: str) -> bool:
             return False
     return True
 
-def _get_private_key() -> str:
-    
-    key = os.environ.get("LOGIN_PRIVATE_KEY_KMS", None)
-    
-    if not key:
-        raise EnvVarNotFound("LOGIN_PRIVATE_KEY_KMS")
-    
-    return key
+def _b64url(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode("ascii")
+
+def _sign_access_token(payload: dict) -> str:
+    key_arn = os.environ.get("LOGIN_KMS_SIGN_KEY_ARN")
+    if not key_arn:
+        raise EnvVarNotFound("LOGIN_KMS_SIGN_KEY_ARN")
+    header = {"alg": "RS256", "typ": "JWT"}
+    segments = (
+        f"{_b64url(json.dumps(header, separators=(',', ':')).encode())}"
+        f".{_b64url(json.dumps(payload, separators=(',', ':')).encode())}"
+    )
+    resp = boto3.client("kms").sign(
+        KeyId=key_arn,
+        Message=segments.encode("utf-8"),
+        MessageType="RAW",
+        SigningAlgorithm="RSASSA_PKCS1_V1_5_SHA_256",
+    )
+    return f"{segments}.{_b64url(resp['Signature'])}"
 
 class LoginUsecase:
     def __init__(
@@ -80,19 +93,12 @@ class LoginUsecase:
         # da o nome pra variável de "user" pra alinha com o código abaixo
         
         access_payload = {
-            "userId": user.user_id, # ID interno do seu banco
+            "user_id": user.user_id, # ID interno do seu banco
             "role": user.role,      # Permissão (ex: 'admin')
-            # 'exp' é obrigatório. Exemplo: Expira em 15 minutos.
-            "exp": int(time.time()) + (15 * 60) 
+            "exp": int(time.time()) + (30 * 60)  # 30 minutos
         }
-        
-        private_key = self._get_private_key()
-        
-        access_token = jwt.encode(
-            access_payload, 
-            private_key, 
-            algorithm="RS256"
-        )
+                
+        access_token = _sign_access_token(access_payload)
         
         refresh_token = secrets.token_hex(32)
         

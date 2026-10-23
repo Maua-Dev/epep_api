@@ -1,11 +1,11 @@
 
-from .login_controller import 
-from .login_usecase import 
+from .login_controller import LoginController
+from .login_usecase import LoginUsecase
 from src.shared.environments import Environments
 from src.shared.helpers.external_interfaces.http_lambda_requests import LambdaHttpRequest, LambdaHttpResponse
 from src.shared.helpers.observability.wrap_handler import observed_handler
 
-observability = Environments.get_observability()(module_name="get_user")
+observability = Environments.get_observability()(module_name="login")
 
 repo = Environments.get_user_repo()()
 usecase = LoginUsecase(repo, observability=observability)
