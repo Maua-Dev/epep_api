@@ -4,7 +4,7 @@ from src.shared.helpers.errors.controller_errors import MissingParameters, Wrong
 from src.shared.helpers.errors.domain_errors import EntityError
 from src.shared.helpers.errors.usecase_errors import NoItemsFound, InvalidJwtFormat, EnvVarNotFound
 from src.shared.helpers.external_interfaces.external_interface import IRequest, IResponse
-from src.shared.helpers.external_interfaces.http_codes import NotFound, BadRequest, InternalServerError
+from src.shared.helpers.external_interfaces.http_codes import OK, NotFound, BadRequest, InternalServerError
 
 
 class LoginController:
@@ -26,6 +26,13 @@ class LoginController:
             )
             
             #TODO fazer o viewmodel
+            
+            return OK(
+                # passa o viewmodel em body:
+                # passa o resfresh token usando o Set-Cookie (olhar no arquivo src.shared.helpers.external_interfaces.http_codes)
+                # esse setcookie é uma chave pra ja setar esse retorno como um cookie no navegador do cara
+                # HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800
+            )
             
         except NoItemsFound as err:
             self.observability.log_exception(message=err.message)
