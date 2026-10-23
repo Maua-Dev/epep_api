@@ -7,6 +7,7 @@ from components.apigw_construct import ApigwConstruct
 from components.dynamo_construct import DynamoConstruct
 from components.lambda_construct import LambdaConstruct
 from components.ssm_construct import SsmConstruct
+from iac.components.kms_construct import KMSConstruct
 
 
 class IacStack(Stack):
@@ -34,6 +35,13 @@ class IacStack(Stack):
             stack_name=stack_name,
             stage=stage,
         )
+        
+        self.kms_construct = KMSConstruct(
+            self,
+            construct_id="KMS",
+            stack_name=stack_name,
+            stage=stage,
+        )
 
         ENVIRONMENT_VARIABLES = {
             "STAGE": stage.upper(),
@@ -42,10 +50,8 @@ class IacStack(Stack):
             "DYNAMO_PARTITION_KEY": "pk",
             "DYNAMO_SORT_KEY": "sk",
             "MSS_NAME": stack_name,
-            "GRAPH_MICROSOFT_ENDPOINT": os.environ.get(
-                "GRAPH_MICROSOFT_ENDPOINT",
-                "https://graph.microsoft.com/v1.0/me",
-            ),
+            "LOGIN_KMS_SIGN_KEY_ARN": self.kms_construct.jwt_sign_key.key_arn,
+            "GOOGLE_CLIENT_ID": os.environ.get("GOOGLE_CLIENT_ID")
         }
 
         self.lambda_construct = LambdaConstruct(
@@ -68,3 +74,9 @@ class IacStack(Stack):
 
         for function in self.lambda_construct.functions_that_need_dynamo_db_access:
             self.dynamo_construct.epep_table.grant_read_write_data(function)
+            
+        self.kms_construct.jwt_sign_key.grant(
+            self.lambda_construct.login,
+            "kms:Sign",
+            "kms:GetPublicKey", 
+        )

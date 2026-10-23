@@ -87,6 +87,8 @@ class LambdaConstruct(Construct):
 
         users_resource = api_gateway_resource.add_resource("users")
         user_id_resource = users_resource.add_resource("{user_id}")
+        
+        login_resource = api_gateway_resource.add_resource("login")
 
         self.create_user = self.create_lambda_function(
             module_name="create_user",
@@ -122,3 +124,10 @@ class LambdaConstruct(Construct):
         )
         self.add_method_to_resource(user_id_resource, "DELETE", self.delete_user)
         self.functions_that_need_dynamo_db_access.append(self.delete_user)
+        
+        self.login_function = self.create_lambda_function(
+            module_name="login",
+            environment_variables=environment_variables
+        )
+        self.add_method_to_resource(login_resource, "POST", self.login_function)
+        self.functions_that_need_dynamo_db_access.append(self.login_function)
