@@ -61,14 +61,22 @@ class Test_GetAllUsersPresenter:
             "all_users": [
                 {
                     'user_id': '5b20bcf8-f467-4569-83f2-1744534c162a',
+                    'name': 'Igor',
                     'email': "admin@example.com",
                     'role': 'admin',
                 },
                 {
                     'user_id': '842faa44-caf7-43bd-8019-d5ae5d3942b2',
+                    'name': 'Maria Lucia',
                     'email': "user@example.com",
                     'role': 'user',
                 },
+                {
+                    'user_id': '4af6b9ec-4414-4c39-ab27-ac920bb2fe8e',
+                    'name': 'Rafaela',
+                    'email': "editor@example.com",
+                    'role': 'editor',
+                }
             ],
             "message": "all users has been retrieved"
         }

@@ -38,6 +38,12 @@ class UpdateUserController:
                     fieldTypeExpected="str",
                     fieldTypeReceived=request.data.get('new_role').__class__.__name__
                 )
+            if request.data.get('new_name') is not None and not isinstance(request.data.get('new_name'), str):
+                raise WrongTypeParameter(
+                    fieldName='new_name',
+                    fieldTypeExpected='str',
+                    fieldTypeReceived=request.data.get('new_name').__class__.__name__
+                )
             
             try:
                 user_id = UUID(request.data.get('user_id'))
@@ -46,6 +52,7 @@ class UpdateUserController:
 
             user = self.UpdateUserUsecase(
                 user_id=user_id,
+                new_name=request.data.get('new_name'),
                 new_email=request.data.get('new_email'),
                 new_role=request.data.get('new_role')
                 )

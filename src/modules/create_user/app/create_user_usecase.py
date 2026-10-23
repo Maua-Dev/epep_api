@@ -10,9 +10,10 @@ class CreateUserUsecase:
     def __init__(self, repo: IUserRepository):
         self.repo = repo
 
-    def __call__(self, email: str) -> User:
+    def __call__(self, name:str, email: str) -> User:
 
         user = User(
+            name=name,
             email=email,
             role=ROLE.USER
         )

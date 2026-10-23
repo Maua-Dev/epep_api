@@ -63,6 +63,7 @@ class Test_DeleteUserPresenter:
 
         expected = {
             'user_id': '5b20bcf8-f467-4569-83f2-1744534c162a',
+            'name': 'Igor',
             'email': 'admin@example.com',
             'role': 'admin',
             'message': 'the user was deleted successfully'
