@@ -5,3 +5,4 @@ urllib3>=2.0.0
 
 # só usado por ObservabilityAWS (wrapper); testes locais usam ObservabilityMock
 aws-lambda-powertools>=3.0.0
+google-auth[requests]>=2.0.0

@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Optional
 
 from aws_cdk import (
@@ -7,6 +8,8 @@ from aws_cdk import (
 )
 from constructs import Construct
 from aws_cdk.aws_apigateway import Resource, LambdaIntegration
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 class LambdaConstruct(Construct):
@@ -22,15 +25,15 @@ class LambdaConstruct(Construct):
         environment_variables: dict,
         subfolder: str = "",
     ) -> lambda_.Function:
-        code = (
-            lambda_.Code.from_asset(f"../src/modules/{subfolder}/{module_name}")
-            if subfolder
-            else lambda_.Code.from_asset(f"../src/modules/{module_name}")
-        )
+        module_path = PROJECT_ROOT / "src" / "modules"
+        if subfolder:
+            module_path /= subfolder
+        module_path /= module_name
+
         return lambda_.Function(
             self,
             module_name.title().replace("_", ""),
-            code=code,
+            code=lambda_.Code.from_asset(str(module_path)),
             handler=f"app.{module_name}_presenter.lambda_handler",
             function_name=f"{module_name}-{self.stack_name}-{self.stage}"[:63],
             runtime=lambda_.Runtime.PYTHON_3_13,
@@ -81,8 +84,33 @@ class LambdaConstruct(Construct):
             self,
             id=f"{stack_name}_LambdaLayer_{stage}",
             layer_version_name=f"{stack_name}-LambdaLayer-{self.stage}",
-            code=lambda_.Code.from_asset("./build"),
+            code=lambda_.Code.from_asset(str(PROJECT_ROOT / "iac" / "build")),
             compatible_runtimes=[lambda_.Runtime.PYTHON_3_13],
+        )
+
+        self.google_authorizer_function = lambda_.Function(
+            self,
+            id="GoogleAuthorizerLambda",
+            function_name=f"google-authorizer-{stack_name}-{stage}"[:63],
+            code=lambda_.Code.from_asset(
+                str(PROJECT_ROOT / "src" / "modules" / "google_authorizer")
+            ),
+            handler="app.google_authorizer_presenter.lambda_handler",
+            runtime=lambda_.Runtime.PYTHON_3_13,
+            architecture=lambda_.Architecture.X86_64,
+            layers=[self.lambda_layer],
+            environment={
+                "GOOGLE_CLIENT_ID": environment_variables.get("GOOGLE_CLIENT_ID", ""),
+            },
+            timeout=Duration.seconds(15),
+            memory_size=512,
+        )
+        self.google_authorizer = apigw.TokenAuthorizer(
+            self,
+            "GoogleTokenAuthorizer",
+            handler=self.google_authorizer_function,
+            identity_source=apigw.IdentitySource.header("Authorization"),
+            results_cache_ttl=Duration.seconds(0),
         )
 
         users_resource = api_gateway_resource.add_resource("users")
