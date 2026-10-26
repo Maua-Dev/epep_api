@@ -2,7 +2,7 @@ import logging
 import os
 from typing import Any
 
-from src.modules.google_authorizer.app.google_authorizer_usecase import (
+from .google_authorizer_usecase import (
     GoogleAuthorizerUsecase,
 )
 from src.shared.helpers.auth.iam_policy import generate_policy
